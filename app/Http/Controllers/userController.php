@@ -26,6 +26,24 @@ class userController extends Controller
 
     }
 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getUser($user_id)
+    {
+        $user = User::find($user_id);
+
+        if (is_null($user)){
+            return ['status' => 200, 'desc' => 'user not found'];
+        }
+
+        return ['status' => 200, 'desc' => 'User fetched successfully', 'data'=> $user];
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

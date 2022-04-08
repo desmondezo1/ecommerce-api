@@ -33,6 +33,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('/users',['uses' => 'userController@index', 'as' => 'getAllUsers']);
     $router->group(['prefix' => 'user'],function () use ($router) {
+        $router->get('/{user_id}',['uses' => 'userController@getUser', 'as' => 'getUser']);
         $router->post('/create',['uses' => 'userController@create', 'as' => 'createUser']);
         $router->patch('/{id}',['uses' => 'userController@update', 'as' => 'updateUser']);
         $router->delete('/{id}',['uses' => 'userController@destroy', 'as' => 'deleteUser']);
@@ -40,9 +41,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'cart'],function () use ($router) {
             $router->get('/{user_id}', ['uses' => 'CartController@index', 'as' => 'getUserCart']);
             $router->post('/', ['uses' => 'CartController@addItemToCart', 'as' => 'addToCart']);
-            $router->patch('/{user_id}', ['uses' => 'CartController@index', 'as' => 'updateUserCart']);
-            $router->delete('/{user_id}/{product_id}', ['uses' => 'CartController@index', 'as' => 'deleteProductFromCart']);
-            $router->delete('/{user_id}', ['uses' => 'CartController@index', 'as' => 'emptyUserCart']);
+            $router->patch('/{user_id}/product/{product_id}', ['uses' => 'CartController@update', 'as' => 'updateProductQuantityInCart']);
+            $router->delete('/{user_id}/product/{product_id}', ['uses' => 'CartController@deleteItemFromCart', 'as' => 'deleteProductFromCart']);
+            $router->delete('/{user_id}', ['uses' => 'CartController@destroy', 'as' => 'emptyUserCart']);
         });
 
         $router->group(['prefix' => 'wishlist'],function () use ($router) {

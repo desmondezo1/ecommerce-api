@@ -28,8 +28,8 @@ class CartController extends Controller
     public function addItemToCart(Request $request)
     {
         $this->validate($request,[
-            'product_id' => ['Required','String','exists:products,uuid'],
-            'user_id' => ['Required','String','exists:users,uuid','unique:carts,user_id'],
+            'product_id' => ['Required','Numeric','exists:products,id', 'unique:carts,product_id'],
+            'user_id' => ['Required','Numeric','exists:users,id'],
             'price' => ['Required','Numeric'],
             'quantity' => ['Required','Integer'],
         ]);
@@ -43,7 +43,6 @@ class CartController extends Controller
         ]);
 
         $cart->save();
-
         return ['status' => 200, 'desc' => 'Item has been added to cart', 'data'=> $cart ];
 
     }
@@ -58,7 +57,8 @@ class CartController extends Controller
     public function deleteItemFromCart( $user_id ,$product_id){
 
         $cart = cart::where('product_id',$product_id)->where('user_id', $user_id)->first();
-        if ($cart->isEmpty()){
+
+        if (is_null($cart)){
             return ['status' => 500, 'desc' => 'Product Item doesn\'t exist on cart', 'data'=> $cart ];
         }
         $cart->delete();
@@ -79,15 +79,15 @@ class CartController extends Controller
     {
         $this->validate($request,[
             'quantity' => ['Integer'],
-            'order_id' => ['String'],
+                'order_id' => ['Integer'],
         ]);
 
-        $cart = cart::where('user_id', $user_id)->where('product-id', $product_id)->first();
-        if ($cart->isEmpty()){
-            return ['status' => 500, 'desc' => 'user cart not found' ];
+        $cart = cart::where('user_id', $user_id)->where('product_id', $product_id)->first();
+        if (is_null($cart)){
+            return ['status' => 500, 'desc' => 'Item not found on User cart' ];
         }
-        isset($request->quantity)? $cart->quantity = $request->quantity: false;
-        isset($request->order_id)? $cart->order_id = $request->order_id: false;
+        isset($request->quantity) ? $cart->quantity = $request->quantity : false;
+        isset($request->order_id) ? $cart->order_id = $request->order_id : false;
         $cart->save();
 
         return ['status' => 200, 'desc' => 'Cart Item Updated successfully', 'data' => $cart ];
@@ -105,8 +105,11 @@ class CartController extends Controller
         if ($cart->isEmpty()){
             return ['status' => 500, 'desc' => 'User cart doesn\'t exist ', 'data'=> $cart ];
         }
-        $cart->delete();
-        return ['status' => 200, 'desc' => 'Cart has been emptied', 'data'=> $cart ];
+        foreach($cart as $cart_item){
+            cart::find($cart_item->id)->delete();
+        }
+//        $cart->delete();
+        return ['status' => 200, 'desc' => 'Cart has been emptied', 'data'=> ['count' => count($cart)] ];
 
     }
 }
