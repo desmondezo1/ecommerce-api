@@ -13,7 +13,17 @@ class Cart extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('carts', function (Blueprint $table) {
+            $table->id();
+//            $table->uuid('uuid')->unique();
+            $table->uuid('product_id');
+            $table->uuid('user_id');
+            $table->uuid('order_id')->nullable();
+            $table->float('price');
+            $table->enum('status',['published','unpublished']);
+            $table->integer('quantity')->default(1);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +33,6 @@ class Cart extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('carts');
     }
 }

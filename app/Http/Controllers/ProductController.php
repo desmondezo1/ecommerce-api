@@ -14,7 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all(["id","title","description","price","offer_price","photo"]);
+        $product = Product::all(["id","title","description","price","offer_price","photo"]);
+        return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $product ];
     }
 
     /**
@@ -41,41 +42,9 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return $product ;
+        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=> $product ];
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(product $product)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -98,6 +67,9 @@ class ProductController extends Controller
         ]);
 
         $product = Product::find($id);
+        if ($product->isEmpty()){
+            return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
+        }
         isset($request->title) ? $product->title = $request->title: false;
         isset($request->price) ? $product->price = $request->price: false;
         isset($request->description) ? $product->description = $request->description: false;
@@ -108,7 +80,7 @@ class ProductController extends Controller
         isset($request->category_id) ? $product->category_id = $request->category_id: false;
         $product->save();
 
-        return $product;
+        return ['status' => 200, 'desc' => 'Product Item has been updated', 'data' => $product ];
 
     }
 
@@ -120,6 +92,12 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        return Product::destroy($id);
+        $prod = Product::destroy($id);
+        if (!$prod){
+            return ['status' => 500, 'desc' => 'Product Item was not deleted' ];
+        }
+
+        return ['status' => 200, 'desc' => 'Product Item has been deleted successfully' ];
+
     }
 }

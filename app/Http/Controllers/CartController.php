@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cart;
+use App\Models\product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -12,53 +13,60 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id)
     {
-        //
+        $cart = cart::where('user_id', $user_id)->get();
+        return ['status' => 200, 'desc' => 'Cart Fetched successfully', 'data' => $cart ];
     }
 
+
     /**
-     * Show the form for creating a new resource.
+     *
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function addItemToCart(Request $request)
     {
-        //
+        $this->validate($request,[
+            'product_id' => ['Required','String','exists:products,uuid'],
+            'user_id' => ['Required','String','exists:users,uuid','unique:carts,user_id'],
+            'price' => ['Required','Numeric'],
+            'quantity' => ['Required','Integer'],
+        ]);
+
+        $cart = cart::create([
+            'product_id' => $request->product_id,
+            'user_id' => $request->user_id,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+
+        ]);
+
+        $cart->save();
+
+        return ['status' => 200, 'desc' => 'Item has been added to cart', 'data'=> $cart ];
+
     }
 
     /**
-     * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     *
+     * @param $user_id
+     * @param $product_id
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function deleteItemFromCart( $user_id ,$product_id){
+
+        $cart = cart::where('product_id',$product_id)->where('user_id', $user_id)->first();
+        if ($cart->isEmpty()){
+            return ['status' => 500, 'desc' => 'Product Item doesn\'t exist on cart', 'data'=> $cart ];
+        }
+        $cart->delete();
+
+        return ['status' => 200, 'desc' => 'Item has removed from cart'];
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function show(cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(cart $cart)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -67,9 +75,22 @@ class CartController extends Controller
      * @param  \App\Models\cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, cart $cart)
+    public function update(Request $request, $user_id, $product_id)
     {
-        //
+        $this->validate($request,[
+            'quantity' => ['Integer'],
+            'order_id' => ['String'],
+        ]);
+
+        $cart = cart::where('user_id', $user_id)->where('product-id', $product_id)->first();
+        if ($cart->isEmpty()){
+            return ['status' => 500, 'desc' => 'user cart not found' ];
+        }
+        isset($request->quantity)? $cart->quantity = $request->quantity: false;
+        isset($request->order_id)? $cart->order_id = $request->order_id: false;
+        $cart->save();
+
+        return ['status' => 200, 'desc' => 'Cart Item Updated successfully', 'data' => $cart ];
     }
 
     /**
@@ -78,8 +99,14 @@ class CartController extends Controller
      * @param  \App\Models\cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(cart $cart)
+    public function destroy($user_id)
     {
-        //
+        $cart = cart::where('user_id',$user_id)->get();
+        if ($cart->isEmpty()){
+            return ['status' => 500, 'desc' => 'User cart doesn\'t exist ', 'data'=> $cart ];
+        }
+        $cart->delete();
+        return ['status' => 200, 'desc' => 'Cart has been emptied', 'data'=> $cart ];
+
     }
 }

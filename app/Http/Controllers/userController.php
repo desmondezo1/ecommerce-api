@@ -17,7 +17,13 @@ class userController extends Controller
      */
     public function index()
     {
-        return User::all();
+        $users = User::all();
+        if ($users->isEmpty()){
+            return ['status' => 200, 'desc' => 'no users available'];
+        }
+
+        return ['status' => 200, 'desc' => 'Users fetched successfully', 'data'=> $users];
+
     }
 
     /**
@@ -31,7 +37,7 @@ class userController extends Controller
             'first_name' => ['required','String'],
             'last_name' => 'required',
             'email' => ['required','unique:users,email','email'],
-            'phone' => ['required', 'Integer'],
+            'phone' => ['required', 'Integer','unique:users,phone'],
             'password' => ['required', 'String'],
             'address' => ['required', 'String'],
             'role'=> ['required', 'string']
@@ -47,41 +53,10 @@ class userController extends Controller
             'role'=> $request->role,
         ]);
 
-        return $user ;
+        return ['status' => 200, 'desc' => 'user created successfully', 'data'=> $user ];
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -103,6 +78,9 @@ class userController extends Controller
         ]);
 
         $user = User::find($id);
+        if ($user->isEmpty()){
+            return ['status' => 500, 'desc' => 'user not found', 'data'=> $user ];
+        }
         isset ($request->first_name) ? $user->first_name = $request->first_name: false;
         isset ($request->last_name) ? $user->last_name = $request->last_name: false;
         isset ($request->email) ? $user->email = $request->email: false;
@@ -112,7 +90,7 @@ class userController extends Controller
         isset ($request->role) ? $user->role = $request->role : false;
         $user->save();
 
-        return $user;
+        return ['status' => 200, 'desc' => 'user updated successfully', 'data'=> $user ];
     }
 
     /**
@@ -123,6 +101,14 @@ class userController extends Controller
      */
     public function destroy($id)
     {
-        return User::destroy($id);
+        $user = User::destroy($id);
+
+        if (!$user){
+            return ['status' => 500, 'desc' => 'user was not deleted' ];
+        }
+
+        return ['status' => 200, 'desc' => 'user has been deleted successfully' ];
+
+
     }
 }

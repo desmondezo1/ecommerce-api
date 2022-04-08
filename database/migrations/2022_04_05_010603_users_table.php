@@ -15,10 +15,11 @@ class UsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+//            $table->uuid('uuid')->unique();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->integer('phone');
+            $table->integer('phone')->unique();
             $table->string('password');
             $table->string('photo')->nullable();
             $table->string('address')->nullable();
@@ -34,6 +35,6 @@ class UsersTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('users');
     }
 }

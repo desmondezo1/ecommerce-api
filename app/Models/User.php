@@ -39,6 +39,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
+    public function cart(){
+        return $this->hasOne(cart::class);
+    }
 
 
 
