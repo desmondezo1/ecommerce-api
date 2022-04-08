@@ -23,6 +23,9 @@ class UsersTable extends Migration
             $table->string('password');
             $table->string('photo')->nullable();
             $table->string('address')->nullable();
+            $table->string('state')->nullable();
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();
             $table->enum('role',['admin','super_admin','partner','shopper']);
             $table->timestamps();
         });

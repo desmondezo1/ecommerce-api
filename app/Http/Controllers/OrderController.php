@@ -24,7 +24,20 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        $this->validate([
+            'user_id' => ['Required','exists:users,id'],
+            'product_id' => ['Required','exists:products,id'],
+            'sub_total' => ['Required','exists:users,id'],
+            'coupon' => ['String'],
+            'total_amount' => ['Required','Numeric'],
+            'quantity' => ['Required', 'Integer'],
+            'delivery_charge' => ['Required'],
+            'first_name' => ['Required','String'],
+            'last_name' => ['Required','String'],
+            'email' => ['Required','email'],
+            'phone'=> ['Required', 'Integer'],
+            'address'=> ['Required','String'],
+        ]);
     }
 
     /**
