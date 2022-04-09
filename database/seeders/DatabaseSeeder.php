@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -13,13 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert(
-            [
-                'first_name' => Str::random(10),
-                'last_name' => Str::random(10),
-                'email' => Str::random(10).'@gmail.com',
-                'password' => Hash::make('password'),
-            ]
-        );
+         $this->call(orderStatusTableSeeder::class);
+         $this->call(userRolesTableSeeder::class);
+         $this->call(UserTableSeeder::class);
+         $this->call(CategoryTableSeeder::class);
+         $this->call(ProductTableSeeder::class);
+
+        // $this->call('UsersTableSeeder');
     }
 }

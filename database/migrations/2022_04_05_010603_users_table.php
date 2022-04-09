@@ -19,14 +19,17 @@ class UsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->integer('phone')->unique();
+            $table->bigInteger('phone')->unique();
             $table->string('password');
             $table->string('photo')->nullable();
             $table->string('address')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();
             $table->string('country')->nullable();
-            $table->enum('role',['admin','super_admin','partner','shopper']);
+            $table->rememberToken();
+//            $table->enum('role',['admin','super_admin','partner','shopper'])->default('shopper');
+            $table->unsignedBigInteger('role')->default(1);
+            $table->foreign('role')->references('id')->on('user_roles');
             $table->timestamps();
         });
     }

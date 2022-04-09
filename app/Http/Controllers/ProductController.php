@@ -67,7 +67,7 @@ class ProductController extends Controller
         ]);
 
         $product = Product::find($id);
-        if ($product->isEmpty()){
+        if (is_null($product)){
             return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
         }
         isset($request->title) ? $product->title = $request->title: false;

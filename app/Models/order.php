@@ -21,4 +21,8 @@ class order extends Model
         'phone',
         'address',
     ];
+
+    public function status(){
+        $this->hasOne(order_status::class,'status');
+    }
 }

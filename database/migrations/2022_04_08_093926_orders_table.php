@@ -28,6 +28,8 @@ class OrdersTable extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('address');
+            $table->unsignedBigInteger('status')->default(1);
+            $table->foreign('status')->references('id')->on('order_status');
             $table->timestamps();
         });
     }

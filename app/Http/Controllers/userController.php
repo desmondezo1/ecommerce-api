@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use Illuminate\Http\Request;
 use \App\Models\User;
 
@@ -54,22 +55,36 @@ class userController extends Controller
         $validatedData = $this->validate($request,[
             'first_name' => ['required','String'],
             'last_name' => 'required',
-            'email' => ['required','unique:users,email','email'],
-            'phone' => ['required', 'Integer','unique:users,phone'],
+            'email' => ['required','email'],
+            'phone' => ['required', 'Integer'],
             'password' => ['required', 'String'],
             'address' => ['required', 'String'],
-            'role'=> ['required', 'string']
+            'state' => 'string',
+            'city' => 'string',
+            'country' => 'string',
+            'photo' => 'required|string',
+            'role'=> ['required', 'Integer', 'exists:user_roles,id']
         ]);
 
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => md5($request->password),
-            'address' => $request->address,
-            'role'=> $request->role,
-        ]);
+        if (User::where('email', '=', $request->email)->exists() OR User::where('phone', '=', $request->phone)->exists()){
+            return  ['status' => '406', 'desc' =>'User already exists'];
+        }
+
+        try {
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => md5($request->password),
+                'address' => $request->address,
+                'role'=> $request->role,
+            ]);
+        } catch (\Exception $e){
+        return  ['status' => '500', 'desc' => $e->getMessage()];
+        }
+
+
 
         return ['status' => 200, 'desc' => 'user created successfully', 'data'=> $user ];
 

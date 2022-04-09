@@ -17,33 +17,43 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         return $router->app->version();
     });
 
-    $router->group(['prefix' => 'products'],function () use ($router) {
-        $router->get('/',['uses' => 'ProductController@index', 'as' => 'getAllProducts']);
-        $router->post('/create',['uses' => 'ProductController@create', 'as' => 'createProduct']);
-        $router->patch('/{id}',['uses' => 'ProductController@update', 'as' => 'updateProduct']);
-        $router->delete('/{id}',['uses' => 'ProductController@destroy', 'as' => 'deleteProduct']);
-    });
 
-    $router->group(['prefix' => 'categories'],function () use ($router) {
-        $router->get('/',['uses' => 'CategoryController@index', 'as' => 'getAllCategories']);
-        $router->post('/create',['uses' => 'CategoryController@create', 'as' => 'createCategory']);
-        $router->patch('/{id}',['uses' => 'CategoryController@update', 'as' => 'updateCategory']);
-        $router->delete('/{id}',['uses' => 'CategoryController@destroy', 'as' => 'deleteCategory']);
-    });
+    $router->post('/login',['uses' => 'AuthController@login', 'as' => 'login']);
+    $router->post('/register',['uses' => 'AuthController@register', 'as' => 'register']);
+    $router->get('/products',['uses' => 'ProductController@index', 'as' => 'getAllProducts']);
 
-    $router->get('/users',['uses' => 'userController@index', 'as' => 'getAllUsers']);
-    $router->group(['prefix' => 'user'],function () use ($router) {
-        $router->get('/{user_id}',['uses' => 'userController@getUser', 'as' => 'getUser']);
-        $router->post('/create',['uses' => 'userController@create', 'as' => 'createUser']);
-        $router->patch('/{id}',['uses' => 'userController@update', 'as' => 'updateUser']);
-        $router->delete('/{id}',['uses' => 'userController@destroy', 'as' => 'deleteUser']);
+    $router->group(['middleware' => 'auth'], function () use ($router){
 
-        $router->group(['prefix' => 'cart'],function () use ($router) {
-            $router->get('/{user_id}', ['uses' => 'CartController@index', 'as' => 'getUserCart']);
-            $router->post('/', ['uses' => 'CartController@addItemToCart', 'as' => 'addToCart']);
-            $router->patch('/{user_id}/product/{product_id}', ['uses' => 'CartController@update', 'as' => 'updateProductQuantityInCart']);
-            $router->delete('/{user_id}/product/{product_id}', ['uses' => 'CartController@deleteItemFromCart', 'as' => 'deleteProductFromCart']);
-            $router->delete('/{user_id}', ['uses' => 'CartController@destroy', 'as' => 'emptyUserCart']);
+        $router->get('/logout',['uses' => 'AuthController@logout', 'as' => 'logout']);
+
+        $router->get('/users',['uses' => 'userController@index', 'as' => 'getAllUsers']);
+
+        $router->group(['prefix' => 'products'],function () use ($router) {
+            $router->post('/create',['uses' => 'ProductController@create', 'as' => 'createProduct']);
+            $router->patch('/{id}',['uses' => 'ProductController@update', 'as' => 'updateProduct']);
+            $router->delete('/{id}',['uses' => 'ProductController@destroy', 'as' => 'deleteProduct']);
+        });
+
+        $router->group(['prefix' => 'categories'],function () use ($router) {
+            $router->get('/',['uses' => 'CategoryController@index', 'as' => 'getAllCategories']);
+            $router->post('/create',['uses' => 'CategoryController@create', 'as' => 'createCategory']);
+            $router->patch('/{id}',['uses' => 'CategoryController@update', 'as' => 'updateCategory']);
+            $router->delete('/{id}',['uses' => 'CategoryController@destroy', 'as' => 'deleteCategory']);
+        });
+
+        $router->group(['prefix' => 'user'],function () use ($router) {
+            $router->get('/{user_id}',['uses' => 'userController@getUser', 'as' => 'getUser']);
+            $router->post('/create',['uses' => 'userController@create', 'as' => 'createUser']); //should be for admin
+            $router->patch('/{id}',['uses' => 'userController@update', 'as' => 'updateUser']);
+            $router->delete('/{id}',['uses' => 'userController@destroy', 'as' => 'deleteUser']);
+
+            $router->group(['prefix' => 'cart'],function () use ($router) {
+                $router->get('/{user_id}', ['uses' => 'CartController@index', 'as' => 'getUserCart']);
+                $router->post('/', ['uses' => 'CartController@addItemToCart', 'as' => 'addToCart']);
+                $router->patch('/{user_id}/product/{product_id}', ['uses' => 'CartController@update', 'as' => 'updateProductQuantityInCart']);
+                $router->delete('/{user_id}/product/{product_id}', ['uses' => 'CartController@deleteItemFromCart', 'as' => 'deleteProductFromCart']);
+                $router->delete('/{user_id}', ['uses' => 'CartController@destroy', 'as' => 'emptyUserCart']);
+            });
         });
 
         $router->group(['prefix' => 'wishlist'],function () use ($router) {
