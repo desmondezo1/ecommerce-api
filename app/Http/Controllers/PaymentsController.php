@@ -22,34 +22,25 @@ class PaymentsController extends Controller
         return  $arr;
     }
 
-    private function getProductsArrayForPayment($product_ids){
+    private function getStripePrd($products){
         $productArray = [];
-        foreach ($product_ids as $id){
-            $product = product::find($id);
+        foreach ($products as $prd){
+            $product = product::find($prd['id']);
             if(!is_null($product)){
               $rr =  [
                     'price_data' => [
                         'currency' => 'ngn',
                         'product_data' => [
-                            'name' => 'T-shirt',
+                            'name' => $product['title'],
                         ],
-                        'unit_amount' => $product['price'],
+                        'unit_amount' => $product['price'] * 100,
                         ],
-                    'quantity' => 3,
+                    'quantity' => $prd['qty'],
                     ];
             }
-
+            $productArray[] = $rr;
         }
-//        [
-//            'price_data' => [
-//                'currency' => 'ngn',
-//                'product_data' => [
-//                    'name' => 'T-shirt',
-//                ],
-//                'unit_amount' => 240000,
-//            ],
-//            'quantity' => 3,
-//        ]
+        return $productArray;
     }
 
     public function checkout(Request $request, Response $response){
@@ -66,9 +57,9 @@ class PaymentsController extends Controller
             return ['status' => 401, 'desc' => 'Order not found'];
         }
 
-        $product_ids = explode(',',$order['product_id']);
-        $product_ids = $this->convertStrgToNum($product_ids);
-        return $product_ids;
+        $products = json_decode($order['product_id'], true);
+        $stripeProducts = $this->getStripePrd($products);
+        return $stripeProducts;
 
         //order id
         //user order
@@ -95,27 +86,7 @@ class PaymentsController extends Controller
         Stripe::setApiKey(env("STRIPE_SECRETE_KEY"));
         $session = \Stripe\Checkout\Session::create([
             'line_items' => [
-                [
-                'price_data' => [
-                    'currency' => 'ngn',
-                    'product_data' => [
-                        'name' => 'T-shirt',
-                    ],
-                    'unit_amount' => 200000,
-                ],
-                'quantity' => 1,
-                ],
-                [
-                    'price_data' => [
-                        'currency' => 'ngn',
-                        'product_data' => [
-                            'name' => 'T-shirt',
-                        ],
-                        'unit_amount' => 240000,
-                    ],
-                    'quantity' => 3,
-                ]
-            ],
+                [$stripeProducts],
             'mode' => 'payment',
             'success_url' => env("APP_URL").'/payment/success?t='.$transId."&o=".$orderId,
             'cancel_url' => env("APP_URL").'/payment/cancel',
