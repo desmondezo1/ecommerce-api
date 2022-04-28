@@ -62,7 +62,7 @@ class OrderController extends Controller
         $total_amount = 0;
         $sub_total = 0;
         $delivery_charge = 0;
-        $product_ids = "";
+        $products = [];
 
         $this->validate($request,[
             'user_id' => ['Required'],
@@ -86,7 +86,7 @@ class OrderController extends Controller
 
         foreach ($cart as $product){
             $sub_total += ($product['price'] * $product['quantity']);
-            $product_ids .= $product['product_id'].",";
+            $products[] = ["id" => $product['product_id'], "qty" => $product['quantity']];
         }
 
 
@@ -100,7 +100,7 @@ class OrderController extends Controller
                 "user_id" => $user->id,
                 'order_number' => 'MCS'. $uuid->toString(),
                 "sub_total" => $sub_total,
-                "product_id" => $product_ids,
+                "product_id" => json_encode($products),
                 "total_amount" => $total_amount,
                 "delivery_charge" => $delivery_charge,
                 "first_name" => $user->first_name,
