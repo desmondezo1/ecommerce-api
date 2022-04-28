@@ -37,26 +37,27 @@
             $router->delete('/{order_id}', ['uses' => 'OrderController@destroy', 'as' => 'deleteOder']);
         });
 
-        $router->group(['prefix' => 'user'],function () use ($router) {
-            $router->get('/{user_id}',['uses' => 'userController@getUser', 'as' => 'getUser']);
-            $router->patch('/{id}',['uses' => 'userController@update', 'as' => 'updateUser']);
-            $router->post('/{user_id}/billing-address',['uses' => 'userController@createBillingAddress', 'as' => 'createUserBilling']);
-            $router->patch('/{user_id}/billing-address',['uses' => 'userController@updateBillingAddress', 'as' => 'updateUserBilling']);
-
-
-            $router->group(['prefix' => 'cart'],function () use ($router) {
-                $router->get('/{user_id}', ['uses' => 'CartController@index', 'as' => 'getUserCart']);
-                $router->post('/', ['uses' => 'CartController@addItemToCart', 'as' => 'addToCart']);
-                $router->patch('/{user_id}/product/{product_id}', ['uses' => 'CartController@update', 'as' => 'updateProductQuantityInCart']);
-                $router->delete('/{user_id}/product/{product_id}', ['uses' => 'CartController@deleteItemFromCart', 'as' => 'deleteProductFromCart']);
-                $router->delete('/{user_id}', ['uses' => 'CartController@destroy', 'as' => 'emptyUserCart']);
-            });
-        });
 
         //Auth Middleware
         $router->group(['middleware' => 'auth'], function () use ($router){
 
             $router->post('/checkout', ['uses' => 'PaymentsController@checkout', 'as' => 'checkout']);
+
+            $router->group(['prefix' => 'user'],function () use ($router) {
+                $router->get('/{user_id}',['uses' => 'userController@getUser', 'as' => 'getUser']);
+                $router->patch('/{id}',['uses' => 'userController@update', 'as' => 'updateUser']);
+                $router->post('/{user_id}/billing-address',['uses' => 'userController@createBillingAddress', 'as' => 'createUserBilling']);
+                $router->patch('/{user_id}/billing-address',['uses' => 'userController@updateBillingAddress', 'as' => 'updateUserBilling']);
+
+
+                $router->group(['prefix' => 'cart'],function () use ($router) {
+                    $router->get('/{user_id}', ['uses' => 'CartController@index', 'as' => 'getUserCart']);
+                    $router->post('/', ['uses' => 'CartController@addItemToCart', 'as' => 'addToCart']);
+                    $router->patch('/{user_id}/product/{product_id}', ['uses' => 'CartController@update', 'as' => 'updateProductQuantityInCart']);
+                    $router->delete('/{user_id}/product/{product_id}', ['uses' => 'CartController@deleteItemFromCart', 'as' => 'deleteProductFromCart']);
+                    $router->delete('/{user_id}', ['uses' => 'CartController@destroy', 'as' => 'emptyUserCart']);
+                });
+            });
 
             //ADMIN ROUTES
             $router->group(['prefix' => 'admin', 'middleware' => 'is_admin'], function () use ($router){

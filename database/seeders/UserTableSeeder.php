@@ -19,6 +19,7 @@ class UserTableSeeder extends Seeder
             'last_name' => 'Ezo-Ojile',
             'email' => 'desmondezoojile@gmail.com',
             'phone' => '08162099369',
+            'address' => '5, Airport Road, Benin',
             'password' => Hash::make('password123'),
             'role' => 4
         ]);
@@ -28,6 +29,7 @@ class UserTableSeeder extends Seeder
             'last_name' => 'Ezo-Ojile',
             'email' => 'desezo@gmail.com',
             'phone' => '08162099364',
+            'address' => '5, Airport Road, Benin',
             'password' => Hash::make('password123'),
             'role' => 1
         ]);

@@ -11,6 +11,8 @@ class PaymentsController extends Controller
 {
 
     public function checkout(Request $request, Response $response){
+        //order id
+
         Stripe::setApiKey(env("STRIPE_SECRETE_KEY"));
         $session = \Stripe\Checkout\Session::create([
             'line_items' => [[

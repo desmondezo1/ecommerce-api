@@ -79,6 +79,10 @@ class OrderController extends Controller
 
         $cart = cart::where('user_id',$user->id)->get();
 
+        if(is_null($cart) || $cart->isEmpty()){
+            return ['status' => 500, 'desc' => 'User Cart is empty'];
+        }
+
         foreach ($cart as $product){
             $sub_total += ($product['price'] * $product['quantity']);
         }
@@ -124,7 +128,7 @@ class OrderController extends Controller
 
             }
         }
-        $cart::destroy(); //delete cart when user creates order.
+        cart::where('user_id',$user->id)->delete(); //delete cart when user creates order.
         return ['status' => 200, 'desc' => 'Order created successfully', 'data'=> $order];
 
 
