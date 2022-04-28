@@ -28,16 +28,25 @@ class CartController extends Controller
     public function addItemToCart(Request $request)
     {
         $this->validate($request,[
-            'product_id' => ['Required','Numeric','exists:products,id', 'unique:carts,product_id'],
+            'product_id' => ['Required','Numeric','exists:products,id'],
             'user_id' => ['Required','Numeric','exists:users,id'],
-            'price' => ['Required','Numeric'],
             'quantity' => ['Required','Integer'],
         ]);
+            $product = product::find($request->product_id);
+            if(is_null($product)){
+                return ['status' => 401, 'desc' => 'Product doesnt exist'];
+            }
+            $prodCart = cart::where('user_id', $request->user_id)->where('product_id', $request->product_id)->first();
 
+            if (!is_null($prodCart)){
+                $prodCart->quantity +=  1;
+                $prodCart->save();
+                return response('Item Quantity Updated',200);
+            }
         $cart = cart::create([
             'product_id' => $request->product_id,
             'user_id' => $request->user_id,
-            'price' => $request->price,
+            'price' => $product->price,
             'quantity' => $request->quantity,
 
         ]);

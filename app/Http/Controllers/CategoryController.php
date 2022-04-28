@@ -125,7 +125,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = category::find($id);
-        if (isNull($category)){
+        if (is_null($category)){
             return ['status'=> 500, 'desc' => 'Category doesn\'t exist ', 'data' => $category];
         }
         if ( $category->is_parent == 1){
@@ -138,4 +138,5 @@ class CategoryController extends Controller
         $category->destroy($id);
         return ['status'=> 200, 'desc' => 'category Deleted successfully ', 'data' => $category];
     }
+
 }

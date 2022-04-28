@@ -27,7 +27,6 @@ class UsersTable extends Migration
             $table->string('city')->nullable();
             $table->string('country')->nullable();
             $table->rememberToken();
-//            $table->enum('role',['admin','super_admin','partner','shopper'])->default('shopper');
             $table->unsignedBigInteger('role')->default(1);
             $table->foreign('role')->references('id')->on('user_roles');
             $table->timestamps();

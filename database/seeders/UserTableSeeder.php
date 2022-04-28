@@ -19,7 +19,17 @@ class UserTableSeeder extends Seeder
             'last_name' => 'Ezo-Ojile',
             'email' => 'desmondezoojile@gmail.com',
             'phone' => '08162099369',
-            'password' => Hash::make('password123')
+            'password' => Hash::make('password123'),
+            'role' => 4
+        ]);
+
+        $user = User::create([
+            'first_name' => 'Desmond',
+            'last_name' => 'Ezo-Ojile',
+            'email' => 'desezo@gmail.com',
+            'phone' => '08162099364',
+            'password' => Hash::make('password123'),
+            'role' => 1
         ]);
     }
 }

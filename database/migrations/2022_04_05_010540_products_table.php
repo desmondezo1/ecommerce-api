@@ -25,7 +25,7 @@ class ProductsTable extends Migration
             $table->float('price');
             $table->enum('stock_status',['outofstock','instock'])->default('instock');
             $table->float('offer_price')->nullable();
-            $table->integer('quantity')->default(10)->nullable();
+            $table->integer('instock_quantity')->default(10)->nullable();
             $table->float('discount')->nullable();
             $table->enum('status', ['published', 'unpublished'])->default('published');
             $table->timestamps();

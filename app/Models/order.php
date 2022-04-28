@@ -25,4 +25,8 @@ class order extends Model
     public function status(){
         $this->hasOne(order_status::class,'status');
     }
+
+    public function shippping_type(){
+        $this->hasOne(shipping_type::class,'shipping_type');
+    }
 }

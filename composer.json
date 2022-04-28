@@ -10,6 +10,7 @@
         "flipbox/lumen-generator": "^9.1",
         "laravel/lumen-framework": "^8.3.1",
         "ramsey/uuid": "^4.2",
+        "stripe/stripe-php": "^7.125",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

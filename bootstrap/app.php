@@ -74,11 +74,12 @@ $app->configure('auth');
 */
 
 // $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
+//     App\Http\Middleware\ExampleMiddleware::class,
 // ]);
 
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
+     'is_admin' => App\Http\Middleware\isAdminMiddleware::class,
  ]);
 
 /*

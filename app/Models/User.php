@@ -41,7 +41,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     public function cart(){
-        return $this->hasOne(cart::class);
+        return $this->hasMany(cart::class);
     }
 
     /**
@@ -67,6 +67,5 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function role(){
         $this->hasOne(user_role::class,'role');
     }
-
 
 }
