@@ -37,6 +37,8 @@
             $router->delete('/{order_id}', ['uses' => 'OrderController@destroy', 'as' => 'deleteOder']);
         });
 
+        $router->get('/payment/success/{trans_id}/{order_id}', ['uses' => 'PaymentsController@success', 'as' => 'paymentSuccess']);
+
 
         //Auth Middleware
         $router->group(['middleware' => 'auth'], function () use ($router){

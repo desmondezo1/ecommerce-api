@@ -8,6 +8,7 @@ use App\Models\product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Stripe\Stripe;
+use Ramsey\Uuid\Uuid;
 
 class PaymentsController extends Controller
 {
@@ -44,7 +45,7 @@ class PaymentsController extends Controller
     }
 
     public function checkout(Request $request, Response $response){
-
+        $uuid = Uuid::uuid4();
 //        $transId
 //        $this->validate($request,[
 //            "order_id" => "exists:orders,id"
@@ -59,42 +60,50 @@ class PaymentsController extends Controller
 
         $products = json_decode($order['product_id'], true);
         $stripeProducts = $this->getStripePrd($products);
-        return $stripeProducts;
-
-        //order id
-        //user order
-        //get order with details
-        //loop and create price_data from products table
-        //Transaction recording should start
-        //create transId
-        // add TransId and Order Id to success
-        // add TransId and Order Id to failure
-
-//        [
-//            'price_data' => [
-//                'currency' => 'ngn',
-//                'product_data' => [
-//                    'name' => 'T-shirt',
-//                ],
-//                'unit_amount' => 240000,
-//            ],
-//            'quantity' => 3,
-//        ]
-
-
+        $trans = payments::create([
+            "trans_id" => $uuid->toString(),
+            "user_id" => $order["user_id"],
+            "order_id" => $order["id"],
+            "trans_status" => "INITIATED",
+             "amount" => $order["total_amount"],
+             "description" => "Payment for Products"
+        ]);
 
         Stripe::setApiKey(env("STRIPE_SECRETE_KEY"));
         $session = \Stripe\Checkout\Session::create([
-            'line_items' => [
+            'line_items' =>
                 [$stripeProducts],
             'mode' => 'payment',
-            'success_url' => env("APP_URL").'/payment/success?t='.$transId."&o=".$orderId,
-            'cancel_url' => env("APP_URL").'/payment/cancel',
+            'success_url' => env("APP_URL").'/api/payment/success/'.$trans['trans_id']."/".$order["id"],
+            'cancel_url' => env("APP_URL").'/api/payment/cancel',
         ]);
-        return  $session ;
+
+        $paymentT = payments::find($trans['id']);
+        $paymentT->stripe_payment_status = $session['payment_status'];
+        $paymentT->stripe_payment_intent = $session['payment_intent'];
+        $paymentT->stripe_payment_currency = $session['currency'];
+        $paymentT->stripe_payment_id = $session['id'];
+        $paymentT->save();
+        return  $session['url'] ;
 
     }
 
+
+    public function success($trans_id, $order_id){
+       $transactionRecord = payments::where("trans_id", $trans_id)->first();
+       $order = order::find($order_id);
+       if (is_null($transactionRecord) || is_null($order)){
+           return ['status' => 500, 'desc' => 'Invalid details provided'];
+       }
+
+        $transactionRecord ->trans_status = "COMPLETED";
+        $transactionRecord ->stripe_payment_status = "paid";
+        $transactionRecord ->save();
+        $order->payment_status = 1;
+        $order->save();
+        return ['status' => 200, 'desc' => 'Payment Success'];
+
+    }
 
 
 

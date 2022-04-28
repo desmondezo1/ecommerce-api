@@ -26,6 +26,7 @@ class OrdersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
+            $table->integer('payment_status')->default(0);
             $table->string('phone');
             $table->string('address');
             $table->string('shipping_type')->default(1);
