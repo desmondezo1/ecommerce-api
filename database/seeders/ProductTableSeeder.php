@@ -14,10 +14,10 @@ class ProductTableSeeder extends Seeder
      */
     public function run()
     {
-        $product = product::create([
-            'title' => 'Product 1',
-            'description' => 'this is  a seeded product from the seeder',
-            'price' => 234.5,
-        ]);
+//        $product = product::create([
+//            'title' => 'Product 1',
+//            'description' => 'this is  a seeded product from the seeder',
+//            'price' => 234.5,
+//        ]);
     }
 }
