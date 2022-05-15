@@ -21,17 +21,17 @@ class UserTableSeeder extends Seeder
             'phone' => '08162099369',
             'address' => '5, Airport Road, Benin',
             'password' => Hash::make('password123'),
-            'role' => 1
+            'role' => 4
         ]);
 
         $user = User::create([
             'first_name' => 'admin',
             'last_name' => 'admin',
             'email' => 'admin@gmail.com',
-            'phone' => '+2348162099364',
+            'phone' => '2348162099364',
             'address' => '5, Airport Road, Benin',
             'password' => Hash::make('password123'),
-            'role' => 4
+            'role' => 1
         ]);
     }
 }
