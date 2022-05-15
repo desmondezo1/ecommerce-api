@@ -31,12 +31,22 @@ class ProductController extends Controller
             'description' => 'required'
         ]);
 
+        if ($request->hasFile('photo')) {
+
+//            exit();
+            $fileExtension = $request->file('photo')->getClientOriginalName();
+            $file = pathinfo($fileExtension, PATHINFO_FILENAME);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $fileStore = $file . '_' . time() . '.' . $extension;
+            $path = $request->file('photo')->move('public/photos', $fileStore);
+        }
+
         $product = product::create([
             'title' => $request->title,
             'price' => $request->price,
             'description' => $request->description,
             'offer_price' => $request->offer_price,
-            'photo' => $request->photo,
+            'photo' => $path,
             'discount' => $request->discount,
             'status' => $request->status,
             'category_id' => $request->category_id,

@@ -22,6 +22,8 @@ class ProductsTable extends Migration
             $table->string('description');
             $table->string('short_description')->nullable();
             $table->string('photo')->nullable();
+            $table->unsignedBigInteger('partner_id')->nullable();
+            $table->foreign('partner_id')->references('id')->on('partners');
             $table->float('price');
             $table->enum('stock_status',['outofstock','instock'])->default('instock');
             $table->float('offer_price')->nullable();
