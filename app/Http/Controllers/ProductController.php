@@ -25,34 +25,37 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
+        return $request;
         $validatedData = $this->validate($request,[
             'title' => ['required','unique:Products,title'],
-            'price' => 'required',
-            'description' => 'required'
+//            'price' => 'required',
+            'description' => 'required',
         ]);
 
         if ($request->hasFile('photo')) {
-
-//            exit();
             $fileExtension = $request->file('photo')->getClientOriginalName();
             $file = pathinfo($fileExtension, PATHINFO_FILENAME);
             $extension = $request->file('photo')->getClientOriginalExtension();
             $fileStore = $file . '_' . time() . '.' . $extension;
-            $path = $request->file('photo')->move('public/photos', $fileStore);
+            $photoPath = $request->file('photo')->move('public/photos', $fileStore);
         }
 
         $product = product::create([
             'title' => $request->title,
-            'price' => $request->price,
+            'price' => $request->pieces[0]->price,
             'description' => $request->description,
             'offer_price' => $request->offer_price,
-            'photo' => $path,
+            'photo' => $photoPath,
             'discount' => $request->discount,
             'status' => $request->status,
             'category_id' => $request->category_id,
+            'partner_id' => $request->brand,
+//            'pdf' => $pdfPath
         ]);
 
-        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=> $product ];
+
+        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=>  $product ];
+//
     }
 
 
