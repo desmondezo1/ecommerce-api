@@ -25,36 +25,38 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-//        echo $_POST['title'];
 //        $validatedData = $this->validate($request,[
 //            'title' => ['required','unique:Products,title'],
 ////            'price' => 'required',
 //            'description' => 'required',
 //        ]);
 
-//        if ($request->hasFile('photo')) {
-//            $fileExtension = $request->file('photo')->getClientOriginalName();
-//            $file = pathinfo($fileExtension, PATHINFO_FILENAME);
-//            $extension = $request->file('photo')->getClientOriginalExtension();
-//            $fileStore = $file . '_' . time() . '.' . $extension;
-//            $photoPath = $request->file('photo')->move('public/photos', $fileStore);
-//        }
-//
-//        $product = product::create([
-//            'title' => $request->title,
-//            'price' => $request->pieces[0]->price,
-//            'description' => $request->description,
-//            'offer_price' => $request->offer_price,
+        if ($request->hasFile('photo')) {
+            $fileExtension = $request->file('photo')->getClientOriginalName();
+            $file = pathinfo($fileExtension, PATHINFO_FILENAME);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $fileStore = $file . '_' . time() . '.' . $extension;
+            $photoPath = $request->file('photo')->move('public/photos', $fileStore);
+        }
+
+       try{
+        $product = product::create([
+            'title' => $request->title,
+            'price' => $request->pieces[0]["price"][0],
+            'description' => $request->description,
+            'offer_price' => $request->pieces[0]["price"][1],
 //            'photo' => $photoPath,
-//            'discount' => $request->discount,
-//            'status' => $request->status,
-//            'category_id' => $request->category_id,
-//            'partner_id' => $request->brand,
-////            'pdf' => $pdfPath
-//        ]);
+            'discount' => $request->pieces[0]["discount"][0],
+            'status' => $request->status,
+            'category_id' => $request->category,
+            'partner_id' => $request->brand,
+//            'pdf' => $pdfPath
+        ]);
+       }catch (\Exception $e){
+           echo $e->getMessage();
+       }
 
-
-        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=>  $request->all() ];
+        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=> $product ];
 //
     }
 
