@@ -31,7 +31,7 @@ class UserTableSeeder extends Seeder
             'phone' => '2348162099364',
             'address' => '5, Airport Road, Benin',
             'password' => Hash::make('password123'),
-            'role' => 1
+            'role' => 4
         ]);
     }
 }
