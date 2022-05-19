@@ -31,27 +31,68 @@ class ProductController extends Controller
 //            'description' => 'required',
 //        ]);
 
-        if ($request->hasFile('photo')) {
-            $fileExtension = $request->file('photo')->getClientOriginalName();
-            $file = pathinfo($fileExtension, PATHINFO_FILENAME);
-            $extension = $request->file('photo')->getClientOriginalExtension();
-            $fileStore = $file . '_' . time() . '.' . $extension;
-            $photoPath = $request->file('photo')->move('public/photos', $fileStore);
-        }
-
-       try{
-        $product = product::create([
+        $productPayload = [
             'title' => $request->title,
             'price' => $request->pieces[0]["price"][0],
             'description' => $request->description,
             'offer_price' => $request->pieces[0]["price"][1],
-//            'photo' => $photoPath,
             'discount' => $request->pieces[0]["discount"][0],
             'status' => $request->status,
             'category_id' => $request->category,
             'partner_id' => $request->brand,
-//            'pdf' => $pdfPath
-        ]);
+        ];
+
+//        if ($request->hasFile('photo')) {
+//            $fileExtension = $request->file('photo')->getClientOriginalName();
+//            $file = pathinfo($fileExtension, PATHINFO_FILENAME);
+//            $extension = $request->file('photo')->getClientOriginalExtension();
+//            $fileStore = $file . '_' . time() . '.' . $extension;
+//            $photoPath = $request->file('photo')->move('public/photos', $fileStore);
+//        }
+
+        try {
+
+
+
+        if ($request->hasFile('image')) {
+            $original_filename = $request->file('image')->getClientOriginalName();
+            $original_filename_arr = explode('.', $original_filename);
+            $file_ext = end($original_filename_arr);
+            $destination_path = 'public/uploads/products/';
+            $image = 'U-' . time() . '.' . $file_ext;
+
+            if ($request->file('image')->move($destination_path, $image)) {
+                $productPayload['photo'] = url('/').'/public/uploads/products/' . $image;
+            } else {
+                return $this->responseRequestError('Cannot upload file');
+            }
+        } else {
+            return $this->responseRequestError('File not found');
+        }
+
+        if ($request->hasFile('pdf')) {
+            $original_filename = $request->file('pdf')->getClientOriginalName();
+            $original_filename_arr = explode('.', $original_filename);
+            $file_ext = end($original_filename_arr);
+            $destination_path = 'public/uploads/products/pdf';
+            $image = 'U-' . time() . '.' . $file_ext;
+
+            if ($request->file('pdf')->move($destination_path, $image)) {
+                $productPayload['pdf'] = url('/').'/public/uploads/products/pdf' . $image;
+            } else {
+                return $this->responseRequestError('Cannot upload file');
+            }
+        } else {
+            return $this->responseRequestError('File not found');
+        }
+
+        }catch (\Exception $e){
+            echo $e->getMessage();
+        }
+
+
+        try{
+        $product = product::create($productPayload);
        }catch (\Exception $e){
            echo $e->getMessage();
        }
