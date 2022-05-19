@@ -15,8 +15,8 @@ class PartnersTable extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('photo');
+            $table->string('name')->nullable();
+            $table->string('photo')->nullable();
             $table->timestamps();
         });
     }

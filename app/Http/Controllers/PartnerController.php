@@ -22,9 +22,32 @@ class PartnerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try{
+            echo $request->hasFile('photo');
+            if ($request->hasFile('photo')) {
+                $fileExtension = $request->file('photo')->getClientOriginalName();
+                $file = pathinfo($fileExtension, PATHINFO_FILENAME);
+                $extension = $request->file('photo')->getClientOriginalExtension();
+                $fileStore = $file . '_' . time() . '.' . $extension;
+                $photoPath = $request->file('photo')->move('public/photos/brandlogo', $fileStore);
+            }
+
+            $brand = partner::create([
+                'name' => $request->name,
+//                'photo' => $photoPath
+            ]);
+
+        }
+        catch(\Exception $e)
+        {
+            echo $e->getMessage();
+        }
+
+//        return ['status' => 200, 'desc' => 'Brand created successfully', 'data'=> $request->all() ];
+        return ['status' => 200, 'desc' => 'Brand created successfully', 'data'=> $brand ];
+
     }
 
     /**

@@ -79,6 +79,13 @@
                     $router->delete('/{id}',['uses' => 'ProductController@destroy', 'as' => 'deleteProduct']);
                 });
 
+                //BRANDS
+                $router->group(['prefix' => 'brands'],function () use ($router) {
+                    $router->patch('/{id}',['uses' => 'PartnerController@update', 'as' => 'updateBrand']);
+                    $router->post('/create',['uses' => 'PartnerController@create', 'as' => 'createBrand']);
+                    $router->delete('/{id}',['uses' => 'PartnerController@destroy', 'as' => 'deleteBrand']);
+                });
+
                 //CATEGORIES
                 $router->group(['prefix' => 'categories'],function () use ($router) {
                     $router->post('/create',['uses' => 'CategoryController@create', 'as' => 'createCategory']);

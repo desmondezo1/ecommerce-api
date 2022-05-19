@@ -13,7 +13,7 @@ class PiecesTable extends Migration
      */
     public function up()
     {
-        Schema::create('piecesController', function (Blueprint $table) {
+        Schema::create('pieces', function (Blueprint $table) {
             $table->id();
             $table->string("product_id")->nullable();
             $table->string("title")->nullable();
@@ -42,6 +42,6 @@ class PiecesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('piecesController');
+        Schema::drop('pieces');
     }
 }
