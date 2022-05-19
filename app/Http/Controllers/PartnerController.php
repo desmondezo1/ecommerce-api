@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\partner;
+use App\Models\product;
 use Illuminate\Http\Request;
 
 class PartnerController extends Controller
@@ -14,7 +15,17 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        //
+         $brands = partner::all();
+         return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $brands ];
+    }
+
+    public function adminIndex(){
+        $brands = partner::all();
+        foreach ( $brands as &$brand){
+            $brand['count'] = product::where('brand_id', $brand->id)->count();
+        }
+        return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $brands ];
+
     }
 
     /**
@@ -25,7 +36,7 @@ class PartnerController extends Controller
     public function create(Request $request)
     {
         try{
-            echo $request->hasFile('photo');
+
             if ($request->hasFile('photo')) {
                 $fileExtension = $request->file('photo')->getClientOriginalName();
                 $file = pathinfo($fileExtension, PATHINFO_FILENAME);

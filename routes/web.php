@@ -20,6 +20,7 @@
         $router->post('/login',['uses' => 'AuthController@login', 'as' => 'login']);
         $router->post('/register',['uses' => 'AuthController@register', 'as' => 'register']);
         $router->get('/products',['uses' => 'ProductController@index', 'as' => 'getAllProducts']);
+        $router->get('/brands',['uses' => 'PartnerController@index', 'as' => 'getAllBrands']);
         $router->get('/categories',['uses' => 'CategoryController@index', 'as' => 'getAllCategories']);
         $router->get('/logout',['uses' => 'AuthController@logout', 'as' => 'logout']);
 
@@ -82,6 +83,7 @@
                 //BRANDS
                 $router->group(['prefix' => 'brands'],function () use ($router) {
                     $router->patch('/{id}',['uses' => 'PartnerController@update', 'as' => 'updateBrand']);
+                    $router->get('/',['uses' => 'PartnerController@adminIndex', 'as' => 'getAllBrandAdmin']);
                     $router->post('/create',['uses' => 'PartnerController@create', 'as' => 'createBrand']);
                     $router->delete('/{id}',['uses' => 'PartnerController@destroy', 'as' => 'deleteBrand']);
                 });
