@@ -43,7 +43,7 @@ class ProductController extends Controller
             'discount' => $pieces[0]["discount"][0],
             'status' => $request->status,
 //            'photo' => $request->file('image'),
-            'pdf' => $request->file('pdf'),
+//            'pdf' => $request->file('pdf'),
             'category_id' => $request->category,
             'brand_id' => $request->brand,
             'volume' => $request->volume,
