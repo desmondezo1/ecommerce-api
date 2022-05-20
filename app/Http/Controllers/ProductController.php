@@ -34,6 +34,7 @@ class ProductController extends Controller
 
         $pieces = json_decode($request->pieces,true);
         $tag =  json_decode($request->tag);
+        $categories =  json_decode($request->category);
 //
         $productPayload = [
             'title' => $request->title,
@@ -43,8 +44,9 @@ class ProductController extends Controller
             'discount' => $pieces[0]["discount"][0],
             'status' => $request->status,
 //            'photo' => $request->file('image'),
+//            'photoCheck' => $request->hasFile('image'),
 //            'pdf' => $request->file('pdf'),
-            'category_id' => $request->category,
+//            'category_id' => $categories,
             'brand_id' => $request->brand,
             'volume' => $request->volume,
             'tag' => $request->tag,
@@ -52,15 +54,6 @@ class ProductController extends Controller
             'uses' => $request->uses,
         ];
 
-//        if ($request->hasFile('photo')) {
-//            $fileExtension = $request->file('photo')->getClientOriginalName();
-//            $file = pathinfo($fileExtension, PATHINFO_FILENAME);
-//            $extension = $request->file('photo')->getClientOriginalExtension();
-//            $fileStore = $file . '_' . time() . '.' . $extension;
-//            $photoPath = $request->file('photo')->move('public/photos', $fileStore);
-//        }
-//
-        try {
 
             if ($request->hasFile('image')) {
                 $original_filename = $request->file('image')->getClientOriginalName();
@@ -74,13 +67,9 @@ class ProductController extends Controller
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
-            } else {
-                return $this->responseRequestError('File not found');
             }
-        }catch (\Exception $e){
-            echo $e->getMessage();
-        }
 
+//
         try {
 
 
@@ -96,8 +85,6 @@ class ProductController extends Controller
             } else {
                 return $this->responseRequestError('Cannot upload file');
             }
-        } else {
-            return $this->responseRequestError('File not found');
         }
 
         }catch (\Exception $e){
@@ -130,8 +117,15 @@ class ProductController extends Controller
            echo $e->getMessage();
        }
 
-        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=> $productPayload ];
-//
+        try {
+            $prd = product::find($product->id);
+            $prd->category()->attach($categories);
+        }catch (\Exception $e){
+            echo $e->getMessage();
+        }
+
+        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=> $product ];
+
     }
 
 

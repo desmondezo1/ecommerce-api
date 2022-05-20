@@ -16,10 +16,15 @@ class product extends Model
         'discount' ,
         'status',
         'category_id' ,
+        'surface',
+        'tag',
+        'title',
+        'uses',
+        'volume'
     ];
 
     public function category(){
-        return $this->hasMany(category::class);
+        return $this->belongsToMany(category::class, 'categories_products', 'product_id', 'category_id');
     }
 }
 

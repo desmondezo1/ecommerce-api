@@ -9,7 +9,7 @@ class category extends Model
     protected $guarded = [];
     //
     public function products(){
-        return $this->hasMany(product::class);
+        return $this->belongsToMany(product::class,'categories_products', 'category_id','product_id' );
     }
 
     public function parent(){
