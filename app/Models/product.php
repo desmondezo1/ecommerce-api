@@ -12,6 +12,7 @@ class product extends Model
         'description',
         'offer_price',
         'photo',
+        'brand_id',
         'discount' ,
         'status',
         'category_id' ,

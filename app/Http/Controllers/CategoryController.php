@@ -21,15 +21,16 @@ class CategoryController extends Controller
         $categories = category::where('status','published')->get();
         $catArray = [];
         $totalCat = count($categories);
-        echo $totalCat;
+
         for($i = 0; $i < $totalCat; $i++){
             if ($categories[$i]->is_parent && is_null($categories[$i]->parent_id)){
                 $categories[$i]['children'] = category::find($categories[$i]->id)->children;
-                array_push($catArray, $categories[$i]);
+                $catArray[]=  $categories[$i];
             }
 
 //            if (!is_null($categories[$i]->parent_id)){
-                array_push($catArray, $categories[$i]);
+//                array_push($catArray, $categories[$i]);
+                $catArray[]= $categories[$i];
 //            }
         }
 
@@ -50,30 +51,37 @@ class CategoryController extends Controller
             'slug' => ['String'],
             'summary' => ['String'],
             'parent_id' => ['Numeric'],
-            'is_parent' => ['required','Boolean'],
+//            'is_parent' => ['required','Boolean'],
             'status' => ['required','String']
         ]);
 
-        if (isset($request->parent_id)){
-            $parent_category = category::find($request->parent_id);
-            if (is_null($parent_category)){
-                return ['status' => 500, 'desc' => 'Parent id not found', 'data'=> null];
-            }
-            $parent_category->is_parent = 1;
-            $parent_category->save();
-        }
-
-        $category = Category::create([
+        $payload = [
             'title' => $request->title,
             'photo' => $request->photo,
             'slug' => $request->slug,
             'summary' => $request->summary,
-            'parent_id' => $request->parent_id,
+//            'parent_id' => $request->parent_id,
             'is_parent' => $request->is_parent,
             'status' => $request->status
-        ]);
+        ];
+//
+        if (isset($request->parent_id) && $request->parent_id !== ''){
+            $parent_category = category::find($request->parent_id);
+            if (is_null($parent_category)){
+                return ['status' => 500, 'desc' => 'Parent id not found', 'data'=> null];
+            }
+            $payload['parent_id'] = (int)$request->parent_id;
+            $parent_category->is_parent = 1;
+            $parent_category->save();
+        }
+
+
+
+
+        $category = Category::create($payload);
 
         return ['status'=> 200, 'desc' => 'category created successfully ', 'data' => $category];
+//        return ['status'=> 200, 'desc' => 'category created successfully ', 'data' => $request->all()];
 
     }
 

@@ -25,6 +25,7 @@ class ProductsTable extends Migration
             $table->string('description')->nullable();
             $table->string('short_description')->nullable();
             $table->string('photo')->nullable();
+            $table->string('volume')->nullable();
             $table->string('pdf')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->foreign('brand_id')->references('id')->on('brands');

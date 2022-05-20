@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pieces;
 use App\Models\product;
 use Illuminate\Http\Request;
 
@@ -31,15 +32,24 @@ class ProductController extends Controller
 //            'description' => 'required',
 //        ]);
 
+        $pieces = json_decode($request->pieces,true);
+        $tag =  json_decode($request->tag);
+//
         $productPayload = [
             'title' => $request->title,
-            'price' => $request->pieces[0]["price"][0],
+            'price' => $pieces[0]["price"][0],
             'description' => $request->description,
-            'offer_price' => $request->pieces[0]["price"][1],
-            'discount' => $request->pieces[0]["discount"][0],
+            'offer_price' => $pieces[0]["price"][1],
+            'discount' => $pieces[0]["discount"][0],
             'status' => $request->status,
+//            'photo' => $request->file('image'),
+            'pdf' => $request->file('pdf'),
             'category_id' => $request->category,
-            'partner_id' => $request->brand,
+            'brand_id' => $request->brand,
+            'volume' => $request->volume,
+            'tag' => $request->tag,
+            'surface' => $request->surface,
+            'uses' => $request->uses,
         ];
 
 //        if ($request->hasFile('photo')) {
@@ -49,26 +59,30 @@ class ProductController extends Controller
 //            $fileStore = $file . '_' . time() . '.' . $extension;
 //            $photoPath = $request->file('photo')->move('public/photos', $fileStore);
 //        }
+//
+        try {
+
+            if ($request->hasFile('image')) {
+                $original_filename = $request->file('image')->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = 'public/uploads/products/';
+                $image = 'U-' . time() . '.' . $file_ext;
+
+                if ($request->file('image')->move($destination_path, $image)) {
+                    $productPayload['photo'] = url('/') . '/public/uploads/products/' . $image;
+                } else {
+                    return $this->responseRequestError('Cannot upload file');
+                }
+            } else {
+                return $this->responseRequestError('File not found');
+            }
+        }catch (\Exception $e){
+            echo $e->getMessage();
+        }
 
         try {
 
-
-
-        if ($request->hasFile('image')) {
-            $original_filename = $request->file('image')->getClientOriginalName();
-            $original_filename_arr = explode('.', $original_filename);
-            $file_ext = end($original_filename_arr);
-            $destination_path = 'public/uploads/products/';
-            $image = 'U-' . time() . '.' . $file_ext;
-
-            if ($request->file('image')->move($destination_path, $image)) {
-                $productPayload['photo'] = url('/').'/public/uploads/products/' . $image;
-            } else {
-                return $this->responseRequestError('Cannot upload file');
-            }
-        } else {
-            return $this->responseRequestError('File not found');
-        }
 
         if ($request->hasFile('pdf')) {
             $original_filename = $request->file('pdf')->getClientOriginalName();
@@ -78,7 +92,7 @@ class ProductController extends Controller
             $image = 'U-' . time() . '.' . $file_ext;
 
             if ($request->file('pdf')->move($destination_path, $image)) {
-                $productPayload['pdf'] = url('/').'/public/uploads/products/pdf' . $image;
+                $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $image;
             } else {
                 return $this->responseRequestError('Cannot upload file');
             }
@@ -93,11 +107,30 @@ class ProductController extends Controller
 
         try{
         $product = product::create($productPayload);
+        if (!empty($pieces)){
+            foreach ( $pieces as $piece){
+                $pieceAdded = Pieces::create([
+                    'product_id' =>  $product->id,
+                    'title' => $product->title,
+                    'category_id' => $product->category_id,
+                    'description' => $product->description,
+//                    'short_description' =>
+                    'photo' => $product->photo,
+                    'brand_id' => $product->brand_id,
+                    'price' => $piece['price'][0],
+                    'stock_status' => 'instock',
+                    'offer_price' => $piece['price'][1],
+                    'instock_quantity' => 10,
+                    'discount' => $piece['discount'][0],
+                    'status' => $product->status
+                ]);
+            }
+        }
        }catch (\Exception $e){
            echo $e->getMessage();
        }
 
-        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=> $product ];
+        return ['status' => 200, 'desc' => 'Product created successfully', 'data'=> $productPayload ];
 //
     }
 
@@ -116,7 +149,6 @@ class ProductController extends Controller
             'price' => 'Numeric',
             'description' => 'String',
             'offer_price' => 'Numeric',
-            'photo' => 'String',
             'discount' => 'Numeric' ,
             'status' => 'String',
             'category_id' => 'Numeric'
