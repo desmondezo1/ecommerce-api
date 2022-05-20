@@ -35,21 +35,23 @@ class PartnerController extends Controller
      */
     public function create(Request $request)
     {
-        try{
 
             $payload = [
-                'name' => $request->name,
+            'name' => $request->name,
             ];
+
+        try{
+
 
             if ($request->hasFile('photo')) {
                 $original_filename = $request->file('photo')->getClientOriginalName();
                 $original_filename_arr = explode('.', $original_filename);
                 $file_ext = end($original_filename_arr);
-                $destination_path = 'public/uploads/brand/';
+                $destination_path = 'public/uploads/brands/';
                 $image = 'U-' . time() . '.' . $file_ext;
 
                 if ($request->file('photo')->move($destination_path, $image)) {
-                    $payload['photo'] = url('/').'/public/uploads/brand/' . $image;
+                    $payload['photo'] = url('/') . '/public/uploads/brands/' . $image;
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
@@ -57,16 +59,32 @@ class PartnerController extends Controller
                 return $this->responseRequestError('File not found');
             }
 
-
-            $brand = partner::create($payload);
+//            if ($request->hasFile('photo')) {
+//                $original_filename = $request->file('photo')->getClientOriginalName();
+//                $original_filename_arr = explode('.', $original_filename);
+//                $file_ext = end($original_filename_arr);
+//                $destination_path = 'public/uploads/brand/';
+//                $image = 'U-' . time() . '.' . $file_ext;
+//
+//                if ($request->file('photo')->move($destination_path, $image)) {
+//                    $payload['photo'] = url('/').'/public/uploads/brand/' . $image;
+//                } else {
+//                    return $this->responseRequestError('Cannot upload file');
+//                }
+//            } else {
+//                return $this->responseRequestError('File not found');
+//            }
 
         }
+
         catch(\Exception $e)
         {
             echo $e->getMessage();
         }
-
+        $brand = partner::create($payload);
         return ['status' => 200, 'desc' => 'Brand created successfully', 'data'=>  $brand];
+//        return ['status' => 200, 'desc' => 'Brand created successfully', 'data'=>  $request->all()];
+//        return ['status' => 200, 'desc' => 'Brand created successfully', 'data'=>  $request->file('photo')];
 
 
     }
