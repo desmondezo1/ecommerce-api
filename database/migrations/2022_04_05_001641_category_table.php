@@ -21,7 +21,7 @@ class CategoryTable extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('summary')->nullable();
             $table->string('is_parent')->default(0);
-            $table->enum('status',['published','unpublished']);
+            $table->enum('status',['published','unpublished'])->default('published');
             $table->timestamps();
         });
     }
