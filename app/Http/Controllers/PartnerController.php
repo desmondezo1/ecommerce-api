@@ -55,8 +55,6 @@ class PartnerController extends Controller
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
-            } else {
-                return $this->responseRequestError('File not found');
             }
 
 //            if ($request->hasFile('photo')) {
