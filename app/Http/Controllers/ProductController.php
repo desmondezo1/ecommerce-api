@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all(["id","title","description","price","offer_price","photo"]);
+        $product = Product::all(["id","title","description","price","offer_price","photo","status","updated_at"]);
         return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $product ];
     }
 

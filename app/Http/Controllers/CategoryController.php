@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\category;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Exception;
 use function PHPUnit\Framework\isNull;
 
 class CategoryController extends Controller
@@ -19,24 +20,212 @@ class CategoryController extends Controller
 
 
         $categories = category::where('status','published')->get();
-        $catArray = [];
+//        $catArray = $this->getArray($categories->toArray());
+        $catArray= [] ;
         $totalCat = count($categories);
 
-        for($i = 0; $i < $totalCat; $i++){
-            if ($categories[$i]->is_parent && is_null($categories[$i]->parent_id)){
-                $categories[$i]['children'] = category::find($categories[$i]->id)->children;
-                $catArray[]=  $categories[$i];
-            }
 
-//            if (!is_null($categories[$i]->parent_id)){
-//                array_push($catArray, $categories[$i]);
-                $catArray[]= $categories[$i];
-//            }
+
+        foreach ( $categories as &$cat){
+            //parents
+            if($cat->is_parent && !$cat->parent_id){
+                $cat['children'] = category::find($cat->id)->children;
+                $catArray[] = $cat;
+            }
+            //base
+            if(!$cat->is_parent && !$cat->parent_id){
+                if(!in_array($cat, $catArray)){
+                    $catArray[] = $cat;
+                }
+            }
         }
 
-        return ['status'=> 200, 'desc' => 'categories fetched successfully ', 'data' => $catArray];
+//        foreach ( $categories as &$cat){
+//            if($cat->is_parent !== 1 && $cat->parent_id !== null){
+//                if(!in_array($cat, $catArray)){
+//                    $catArray[] = $cat;
+//                }
+//            }
+//        }
+
+//        function getChildren($arrayPa, $result = []){
+//            //base case
+//            //if array has no parents return
+//            foreach ($arrayPa  as $arr){
+//                in_array('is_parent');
+//                if ($arr)
+//            }
+
+//            if(!is_array($arrayPa) || empty($arrayPa)){
+//                echo "empty";
+//                return $result;
+//            }
+//
+//            $last = $arrayPa[count($arrayPa) - 1];
+//            if($last->is_parent !== 1){
+//                echo "checks";
+//                $result[] = $last;
+////                array_pop($arrayPa);
+////                getChildren($arrayPa, $result);
+//            }else{
+//                echo "children";
+//                $last['children'] = category::find($last->id)->children;
+//                if(!is_array($last['children'])) {
+//                    foreach ($last['children'] as &$child) {
+//                        if($child->is_parent !== 1){
+//                            $child['children'] = category::find($child->id)->children;
+//                        }
+//
+//                    }
+//                }
+////                $result[] = $last;
+//                array_pop($arrayPa);
+//                getChildren($arrayPa, $result);
+//            }
+
+//        }
+//
+//
+        foreach ($catArray as &$cat){
+            if($cat->children){
+                foreach ($cat->children as &$c){
+                    if($c->is_parent){
+                        $c['children'] = category::find($c->id)->children;
+                        foreach ($c['children'] as &$secChild){
+                            if($secChild->is_parent){
+                                $secChild['children'] =  category::find($secChild->id)->children;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+//        $vals =[];
+//        foreach ( $categories as $cat){
+//            if(!$cat->is_parent && $cat->parent_id){
+////                echo "catarray ".count($catArray);
+//                $vals[] = $cat;
+////                $v = self::findItemRecursive($catArray, $cat, []);
+//            }
+//        }
+//        $v = [];
+//        for ($i = 0, $i < count($vals); $i++;){
+//            $v[] = self::findItemRecursive($catArray, $vals[$i]);
+//        }
+
+//        echo count($vals);
+//
+//        function findItemRecursive($arr, $item){
+//            if (count($arr) <= 0){
+//                return $arr;
+//            }
+//
+//            $res = [];
+//            foreach ( $arr as &$rr){
+//                if ($item['parent_id'] == $rr['id']){
+//                    $rr['children'] = $item;
+//                    $res[] = $arr;
+//                }else{
+//                    if (in_array('children', $rr)){
+//                        if( is_array($rr['children']) || is_object($rr['children']) ){
+//                            $res[] = findItemRecursive($rr['children']);
+//                        }
+//                    }
+//                }
+//            }
+//
+//            return $res;
+//        }
+
+
+//        $v = getChildren( $catArray);
+//        $v = getChildren( $categories);
+
+
+
+
+        return ['status'=> 200, 'desc' => 'categories fetched successfully ', 'data' => $catArray,];
+//        return ['status'=> 200, 'desc' => 'categories fetched successfully ', 'data' => $res];
+//        return ['status'=> 200, 'desc' => 'categories fetched successfully ', 'v'=> $v ];
+//        return ['status'=> 200, 'desc' => 'categories fetched successfully ', 'data' => $categories];
 
     }
+
+//
+//    public function getArray($categories, $catArray = []){
+////        $categories = (array)$categories;
+//        if(empty($categories)){
+//            if(empty($catArray)){
+//                return [];
+//            }
+//            return $catArray;
+//        }
+//
+////        foreach ( $categories as &$cat){
+//        for ($i=0; $i < count($categories); $i++){
+//            if($categories[$i]['is_parent'] == 1 && !isset($categories[$i]['parent_id'])){
+//                $categories[$i]['children'] = category::find($categories[$i]->id)->children;
+//                $catArray[] = $categories[$i];
+//            }
+//
+//            print_r($categories[$i]['is_parent']);
+//            if($categories[$i]['is_parent'] !== 1 && !isset($categories[$i]['parent_id'])){
+//
+//                if(!in_array($categories[$i], $catArray)){
+//                    $catArray[] = $categories[$i];
+//                }
+//            }
+//        }
+//
+////        foreach ($catArray as &$cat){
+////            if($cat['children']){
+////                foreach ($cat['children'] as &$c){
+////
+////                    if($c['is_parent'] == 1){
+////                        $c['children'] = category::find($c->id)->children;
+////                    }
+////                }
+////            }
+////        }
+//        echo "here";
+//
+//        array_pop($categories);
+//        return $this->getArray($categories, $catArray);
+//
+//    }
+
+    public static function findItemRecursive($arr, $item, $res = []){
+        if (count($arr) <= 0 || empty($item)){
+            echo count($arr);
+            echo "exits";
+            return $res;
+        }
+
+            $rr = $arr[count($arr) -1];
+//        foreach ( $arr as &$rr){
+            if ($item->parent_id === $rr->id){
+                echo "parenzt equals";
+                $rr['children'] = $item;
+//                $res[] = $arr;
+                print_r(['id' => $rr->id, "parent" => $rr->parent_id]);
+                print_r(['item-id' => $item->id, "item-parent" => $item->parent_id]);
+                return $rr;
+            }else{
+                if (in_array('children',  $rr->toArray())){
+                    if( is_array($rr['children']) || is_object($rr['children']) ){
+                        echo "recurs here ";
+                        $res[] = self::findItemRecursive($rr['children']);
+                        return $res;
+                    }
+                }
+//            }
+        }
+        array_pop($arr);
+        return self::findItemRecursive($arr, $item);
+    }
+
 
     /**
      * Show the form for creating a new resource.
