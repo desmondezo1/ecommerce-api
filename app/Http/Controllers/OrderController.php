@@ -136,13 +136,13 @@ class OrderController extends Controller
 
 
         if (!is_null($order)){
-            print_r($product);
-            foreach ($cart as $produ){
+
+            foreach ($products as $produ){
 
                 try {
                     $orderItems = order_items::create([
                         "order_id" => $order->id,
-                        "quantity" => $produ['quantity'],
+                        "quantity" => $produ['qty'],
                         "product_id" => (int)$produ["id"]
                     ]);
                 } catch (Exception $e){
