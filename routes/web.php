@@ -51,7 +51,7 @@
                 $router->patch('/{id}',['uses' => 'userController@update', 'as' => 'updateUser']);
                 $router->post('/{user_id}/billing-address',['uses' => 'userController@createBillingAddress', 'as' => 'createUserBilling']);
                 $router->patch('/{user_id}/billing-address',['uses' => 'userController@updateBillingAddress', 'as' => 'updateUserBilling']);
-                $router->patch('/{user_id}/orders',['uses' => 'OrderController@getUserOrders', 'as' => 'getUserOrders']);
+                $router->get('/{user_id}/orders',['uses' => 'OrderController@getUserOrders', 'as' => 'getUserOrders']);
 
 
                 $router->group(['prefix' => 'cart'],function () use ($router) {
