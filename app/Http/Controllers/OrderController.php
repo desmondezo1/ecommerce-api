@@ -45,7 +45,19 @@ class OrderController extends Controller
      */
     public function getUserOrders($user_id)
     {
-        return order::where('user_id',$user_id)->get();
+
+        $user = User::find($user_id);
+        if (is_null($user)){
+            return ['status' => 500, 'desc' => 'User not found' ];
+        }
+
+        $order = order::where('user_id',$user_id)->get();
+
+        if (is_null($order)){
+            return ['status' => 500, 'desc' => 'Order not found' ];
+        }
+        return ['status' => 200, 'desc' => 'Order fetched successfully', 'data'=> $order ];
+
     }
 
 
