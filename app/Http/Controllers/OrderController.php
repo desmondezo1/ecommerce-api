@@ -63,8 +63,17 @@ class OrderController extends Controller
             $val = order_items::where('order_id', $ord->id)->get();
             $item = array_merge($item, $val->toArray());
         }
+        $resll = [];
+        foreach($item as $it){
+            print_r($it['product_id']);
+            if(!is_null($it['product_id'])){
+                echo "id is  -> ".$it['product_id']. " --";
+                $prod = product::find($it['product_id']);
+                array_push($resll, $prod);
+            }
+        }
 
-        return ['status' => 200, 'desc' => 'Order fetched successfully', 'data'=> $item ];
+        return ['status' => 200, 'desc' => 'Order fetched successfully', 'data'=> $resll ];
 
     }
 
