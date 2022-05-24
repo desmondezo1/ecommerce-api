@@ -51,12 +51,20 @@ class OrderController extends Controller
             return ['status' => 500, 'desc' => 'User not found' ];
         }
 
+       //grab all orders for user
         $order = order::where('user_id',$user_id)->get();
 
         if (is_null($order)){
             return ['status' => 500, 'desc' => 'Order not found' ];
         }
-        return ['status' => 200, 'desc' => 'Order fetched successfully', 'data'=> $order ];
+        $item = [];
+        foreach ($order as $ord){
+            //get items from the order items table
+            $val = order_items::where('order_id', $ord->id)->get();
+            $item = array_merge($item, $val->toArray());
+        }
+
+        return ['status' => 200, 'desc' => 'Order fetched successfully', 'data'=> $item ];
 
     }
 
@@ -128,14 +136,14 @@ class OrderController extends Controller
 
 
         if (!is_null($order)){
-
-            foreach ($cart as $product){
+            print_r($product);
+            foreach ($cart as $produ){
 
                 try {
                     $orderItems = order_items::create([
                         "order_id" => $order->id,
-                        "quantity" => $product['quantity'],
-                        "product_id" => $product["product_id"]
+                        "quantity" => $produ['quantity'],
+                        "product_id" => (int)$produ["id"]
                     ]);
                 } catch (Exception $e){
                     return ['status' => 500, 'desc' => 'Couldnt create order', 'data'=> $e->getMessage()];
