@@ -65,9 +65,7 @@ class OrderController extends Controller
         }
         $resll = [];
         foreach($item as $it){
-            print_r($it['product_id']);
             if(!is_null($it['product_id'])){
-                echo "id is  -> ".$it['product_id']. " --";
                 $prod = product::find($it['product_id']);
                 array_push($resll, $prod);
             }
