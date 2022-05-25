@@ -81,7 +81,8 @@ class AuthController extends Controller
         }
 
         if ($us->save()){
-            return $this->login($request);
+            $r = $this->login($request);
+            return ['status' => 200, 'desc' => 'User Registered successfully', 'data'=> $r->original ];
         }
 
     }

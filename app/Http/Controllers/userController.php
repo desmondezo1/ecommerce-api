@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Models\billing_address;
+use App\Models\user_role;
 use Illuminate\Http\Request;
 use \App\Models\User;
 
@@ -19,8 +20,9 @@ class userController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        if ($users->isEmpty()){
+        $role = user_role::where("role",'SHOPPER')->first();
+        $users = User::where("role", $role['id'])->get();
+        if (is_null($users)){
             return ['status' => 200, 'desc' => 'no users available'];
         }
 
@@ -28,6 +30,29 @@ class userController extends Controller
 
     }
 
+    public  function  getAdmins(){
+
+        $userR1 = user_role::where(
+            'role','=','ADMIN'
+          )->get();
+
+        $userR2 = user_role::where(
+            'role', '=', 'SUPER_ADMIN'
+          )->get();
+
+        $roles = array_merge( $userR2 ->toArray(), $userR1->toArray());
+
+        $users = [];
+        foreach ($roles as $role){
+            $users[] = User::where("role", $role['id'])->get();
+        }
+
+        if (is_null($users)){
+            return ['status' => 500, 'desc' => 'no users available'];
+        }
+
+        return ['status' => 200, 'desc' => 'Admins fetched successfully', 'data'=> $users];
+    }
 
     /**
      * Display a listing of the resource.
