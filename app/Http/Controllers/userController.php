@@ -20,8 +20,14 @@ class userController extends Controller
      */
     public function index()
     {
-        $role = user_role::where("role",'SHOPPER')->first();
-        $users = User::where("role", $role['id'])->get();
+        $roleS = user_role::where("role",'SHOPPER')->first();
+        $users1 = User::where("role", $roleS['id'])->get();
+
+        $roleP = user_role::where("role",'PARTNER')->first();
+        $users2 = User::where("role", $roleP['id'])->get();
+
+        $users = array_merge($users2->toArray(),$users1->toArray());
+
         if (is_null($users)){
             return ['status' => 200, 'desc' => 'no users available'];
         }
@@ -32,20 +38,12 @@ class userController extends Controller
 
     public  function  getAdmins(){
 
-        $userR1 = user_role::where(
-            'role','=','ADMIN'
-          )->get();
+        $userR1 = user_role::where('role','=','ADMIN')->first();
+        $users1 = User::where("role", $userR1['id'])->get();
 
-        $userR2 = user_role::where(
-            'role', '=', 'SUPER_ADMIN'
-          )->get();
-
-        $roles = array_merge( $userR2 ->toArray(), $userR1->toArray());
-
-        $users = [];
-        foreach ($roles as $role){
-            $users[] = User::where("role", $role['id'])->get();
-        }
+        $userR2 = user_role::where('role', '=', 'SUPER_ADMIN')->first();
+        $users2 = User::where("role", $userR2['id'])->get();
+        $users = array_merge( $users1 ->toArray(), $users2->toArray());
 
         if (is_null($users)){
             return ['status' => 500, 'desc' => 'no users available'];
