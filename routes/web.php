@@ -74,6 +74,7 @@
                 $router->get('/admins',['uses' => 'userController@getAdmins', 'as' => 'getAllAdminUsers']);
                 $router->post('user/create',['uses' => 'userController@create', 'as' => 'createUser']);
                 $router->delete('user/{id}',['uses' => 'userController@destroy', 'as' => 'deleteUser']);
+                $router->patch('user/{user_id}',['uses' => 'userController@updateUserRole', 'as' => 'updateUserRole']);
 
                 //ORDERS
                 $router->get('/orders', ['uses' => 'OrderController@index', 'as' => 'getAllOrders']);

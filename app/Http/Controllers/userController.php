@@ -171,6 +171,26 @@ class userController extends Controller
         return ['status' => 200, 'desc' => 'user updated successfully', 'data'=> $user ];
     }
 
+    public function updateUserRole(Request $request, $user_id){
+        $user = User::find($user_id);
+        if(!$user){
+            return ['status' => 500, 'desc' => 'no user found to update'];
+        }
+
+        if($user['role'] == 2 || $user['role'] ==4){
+            return ['status' => 503, 'desc' => 'Cannot change user Role, only Admins can!'];
+        }
+
+        if(isset ($request->role) && $request->role == 1 || $request->role == 3){
+            $user->role = $request->role;
+            $user->save();
+            return ['status' => 200, 'desc' => 'Users role updated', 'data'=> $user];
+        }
+
+        return ['status' => 503, 'desc' => 'Role Not allowed'];
+
+    }
+
     public function updateBillingAddress(Request $request, $user_id){
         $this->validate($request, [
             "is_company" => ['Boolean'],
