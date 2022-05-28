@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pieces;
 use App\Models\product;
+use App\Models\productImages;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -19,6 +20,18 @@ class ProductController extends Controller
         return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $product ];
     }
 
+    public  function getSingleProduct($product_id){
+        $product = product::find($product_id);
+        if (is_null($product)){
+            return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
+        }
+
+        $product['images'] = product::find($product->id)->images;
+
+        return ['status' => 200, 'desc' => 'Product Fetched', 'data' => $product ];
+
+    }
+
     /**
      *
      * @param Request $request
@@ -26,6 +39,7 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
+//        return $request->all();
 //        $validatedData = $this->validate($request,[
 //            'title' => ['required','unique:Products,title'],
 ////            'price' => 'required',
@@ -55,37 +69,23 @@ class ProductController extends Controller
         ];
 
 
-            if ($request->hasFile('image')) {
-                $original_filename = $request->file('image')->getClientOriginalName();
-                $original_filename_arr = explode('.', $original_filename);
-                $file_ext = end($original_filename_arr);
-                $destination_path = 'public/uploads/products/';
-                $image = 'U-' . time() . '.' . $file_ext;
-
-                if ($request->file('image')->move($destination_path, $image)) {
-                    $productPayload['photo'] = url('/') . '/public/uploads/products/' . $image;
-                } else {
-                    return $this->responseRequestError('Cannot upload file');
-                }
-            }
-
 //
         try {
 
 
-        if ($request->hasFile('pdf')) {
-            $original_filename = $request->file('pdf')->getClientOriginalName();
-            $original_filename_arr = explode('.', $original_filename);
-            $file_ext = end($original_filename_arr);
-            $destination_path = 'public/uploads/products/pdf';
-            $image = 'U-' . time() . '.' . $file_ext;
+            if ($request->hasFile('pdf')) {
+                $original_filename = $request->file('pdf')->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = 'public/uploads/products/pdf';
+                $image = 'U-' . time() . '.' . $file_ext;
 
-            if ($request->file('pdf')->move($destination_path, $image)) {
-                $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $image;
-            } else {
-                return $this->responseRequestError('Cannot upload file');
+                if ($request->file('pdf')->move($destination_path, $image)) {
+                    $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $image;
+                } else {
+                    return $this->responseRequestError('Cannot upload file');
+                }
             }
-        }
 
         }catch (\Exception $e){
             echo $e->getMessage();
@@ -93,29 +93,58 @@ class ProductController extends Controller
 
 
         try{
-        $product = product::create($productPayload);
-        if (!empty($pieces)){
-            foreach ( $pieces as $piece){
-                $pieceAdded = Pieces::create([
-                    'product_id' =>  $product->id,
-                    'title' => $product->title,
-                    'category_id' => $product->category_id,
-                    'description' => $product->description,
-//                    'short_description' =>
-                    'photo' => $product->photo,
-                    'brand_id' => $product->brand_id,
-                    'price' => $piece['price'][0],
-                    'stock_status' => 'instock',
-                    'offer_price' => $piece['price'][1],
-                    'instock_quantity' => 10,
-                    'discount' => $piece['discount'][0],
-                    'status' => $product->status
+            $product = product::create($productPayload);
+            if (!empty($pieces)){
+                foreach ( $pieces as $piece){
+                    $pieceAdded = Pieces::create([
+                        'product_id' =>  $product->id,
+                        'title' => $product->title,
+                        'category_id' => $product->category_id,
+                        'description' => $product->description,
+    //                    'short_description' =>
+                        'photo' => $product->photo,
+                        'brand_id' => $product->brand_id,
+                        'price' => $piece['price'][0],
+                        'stock_status' => 'instock',
+                        'offer_price' => $piece['price'][1],
+                        'instock_quantity' => 10,
+                        'discount' => $piece['discount'][0],
+                        'status' => $product->status
+                    ]);
+                }
+            }
+        }catch (\Exception $e){
+           echo $e->getMessage();
+       }
+
+        //Add product
+        $imagePayload = [];
+        if ($request->has('image')){
+            foreach ( $request->file('image') as $photo) {
+                $original_filename = $photo->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = 'public/uploads/products/';
+                $image = 'U-' . time() . '.' . $file_ext;
+                if ($photo->move($destination_path, $image)) {
+                    $imagePayload[]['image'] =  url('/') . '/public/uploads/products/' . $image;
+//                    $productPayload['photo'] = url('/') . '/public/uploads/products/' . $image;
+                } else {
+                    return $this->responseRequestError('Cannot upload file');
+                }
+            }
+        }
+
+        if(!empty($imagePayload)){
+            foreach ($imagePayload as $img){
+                $prodImage = productImages::create([
+                    'product_id' => $product->id,
+                    'image' => $img['image'],
                 ]);
             }
         }
-       }catch (\Exception $e){
-           echo $e->getMessage();
-       }
+
+
 
         try {
             $prd = product::find($product->id);
