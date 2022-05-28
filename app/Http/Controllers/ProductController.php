@@ -47,12 +47,12 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-//        return $request->all();
-//        $validatedData = $this->validate($request,[
-//            'title' => ['required','unique:Products,title'],
-////            'price' => 'required',
-//            'description' => 'required',
-//        ]);
+        return $request->all();
+        $validatedData = $this->validate($request,[
+            'title' => ['required','unique:Products,title'],
+//            'price' => 'required',
+            'description' => 'required',
+        ]);
 
         $pieces = json_decode($request->pieces,true);
         $tag =  json_decode($request->tag);
@@ -65,6 +65,7 @@ class ProductController extends Controller
             'offer_price' => $pieces[0]["price"][1],
             'discount' => $pieces[0]["discount"][0],
             'status' => $request->status,
+            'weight' => $pieces[0]['weight'],
 //            'photo' => $request->file('image'),
 //            'photoCheck' => $request->hasFile('image'),
 //            'pdf' => $request->file('pdf'),
@@ -86,10 +87,10 @@ class ProductController extends Controller
                 $original_filename_arr = explode('.', $original_filename);
                 $file_ext = end($original_filename_arr);
                 $destination_path = 'public/uploads/products/pdf';
-                $image = 'U-' . time() . '.' . $file_ext;
+                $pdf = 'U-' . time() . '.' . $file_ext;
 
-                if ($request->file('pdf')->move($destination_path, $image)) {
-                    $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $image;
+                if ($request->file('pdf')->move($destination_path, $pdf)) {
+                    $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $pdf;
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
@@ -110,6 +111,7 @@ class ProductController extends Controller
                         'category_id' => $product->category_id,
                         'description' => $product->description,
     //                    'short_description' =>
+                        'weight' => $pieces['weight'],
                         'photo' => $product->photo,
                         'brand_id' => $product->brand_id,
                         'price' => $piece['price'][0],
@@ -201,6 +203,14 @@ class ProductController extends Controller
 
         return ['status' => 200, 'desc' => 'Product Item has been updated', 'data' => $product ];
 
+    }
+
+    public function downloadPdf(Request $request){
+        $path = $request->path;
+        if(!$path){
+            return ;
+        }
+        return response()->download($path);
     }
 
     /**

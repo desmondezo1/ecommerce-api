@@ -21,6 +21,7 @@
         $router->post('/register',['uses' => 'AuthController@register', 'as' => 'register']);
         $router->get('/products',['uses' => 'ProductController@index', 'as' => 'getAllProducts']);
         $router->get('/product/{product_id}',['uses' => 'ProductController@getSingleProduct', 'as' => 'getSingleProducts']);
+        $router->post('/product/downloadpdf',['uses' => 'ProductController@downloadPdf', 'as' => 'downloadProduct']);
         $router->get('/brands',['uses' => 'PartnerController@index', 'as' => 'getAllBrands']);
         $router->get('/categories',['uses' => 'CategoryController@index', 'as' => 'getAllCategories']);
         $router->get('/logout',['uses' => 'AuthController@logout', 'as' => 'logout']);
