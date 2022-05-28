@@ -47,7 +47,7 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-        return $request->all();
+//        return $request->all();
         $validatedData = $this->validate($request,[
             'title' => ['required','unique:Products,title'],
 //            'price' => 'required',
@@ -57,6 +57,7 @@ class ProductController extends Controller
         $pieces = json_decode($request->pieces,true);
         $tag =  json_decode($request->tag);
         $categories =  json_decode($request->category);
+        return $pieces;
 //
         $productPayload = [
             'title' => $request->title,
@@ -111,7 +112,7 @@ class ProductController extends Controller
                         'category_id' => $product->category_id,
                         'description' => $product->description,
     //                    'short_description' =>
-                        'weight' => $pieces['weight'],
+                        'weight' => $piece['weight'],
                         'photo' => $product->photo,
                         'brand_id' => $product->brand_id,
                         'price' => $piece['price'][0],
