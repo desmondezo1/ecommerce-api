@@ -15,6 +15,7 @@ class AlterProductsTae extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->string('weight')->nullable();
+            $table->string('packaging')->nullable();
         });
     }
 
@@ -27,6 +28,7 @@ class AlterProductsTae extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->dropColumn('weight');
+            $table->dropColumn('packaging');
 
         });
     }

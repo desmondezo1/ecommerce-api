@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\partner;
 use App\Models\Pieces;
 use App\Models\product;
 use App\Models\productImages;
@@ -30,11 +31,17 @@ class ProductController extends Controller
 
     public  function getSingleProduct($product_id){
         $product = product::find($product_id);
+        $pieces = Pieces::where('product_id', $product_id)->get();
+
         if (is_null($product)){
             return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
         }
 
         $product['images'] = product::find($product->id)->images;
+
+            $brand = partner::find($product->brand_id);
+            $product['brand'] = $brand->name;
+            $product['variation'] = $pieces;
 
         return ['status' => 200, 'desc' => 'Product Fetched', 'data' => $product ];
 
@@ -57,7 +64,6 @@ class ProductController extends Controller
         $pieces = json_decode($request->pieces,true);
         $tag =  json_decode($request->tag);
         $categories =  json_decode($request->category);
-        return $pieces;
 //
         $productPayload = [
             'title' => $request->title,
@@ -67,6 +73,7 @@ class ProductController extends Controller
             'discount' => $pieces[0]["discount"][0],
             'status' => $request->status,
             'weight' => $pieces[0]['weight'],
+            'packaging' => $pieces[0]['packaging'],
 //            'photo' => $request->file('image'),
 //            'photoCheck' => $request->hasFile('image'),
 //            'pdf' => $request->file('pdf'),
@@ -111,7 +118,7 @@ class ProductController extends Controller
                         'title' => $product->title,
                         'category_id' => $product->category_id,
                         'description' => $product->description,
-    //                    'short_description' =>
+                        'packaging' => $piece['packaging'],
                         'weight' => $piece['weight'],
                         'photo' => $product->photo,
                         'brand_id' => $product->brand_id,

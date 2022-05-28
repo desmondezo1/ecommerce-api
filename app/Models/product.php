@@ -19,6 +19,7 @@ class product extends Model
         'pdf',
         'surface',
         'weight',
+        'packaging',
         'tag',
         'title',
         'uses',

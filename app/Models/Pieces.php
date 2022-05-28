@@ -12,6 +12,8 @@ class Pieces extends Model
         'product_id',
         'description',
         'brand_id',
+        'packaging',
+        'weight',
         'offer_price',
         'photo',
         'discount' ,
