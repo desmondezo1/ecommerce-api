@@ -16,8 +16,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all(["id","title","description","price","offer_price","photo","status","updated_at"]);
-        return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $product ];
+        $products = Product::all(["id","title","description","price","offer_price","photo","status","updated_at"]);
+        foreach ($products as &$product ){
+            $images = product::find($product->id)->images;
+            $images = $images->toArray();
+            $product['photo'] = "https://via.placeholder.com/150";
+            if(!empty($images)){
+              $product['photo'] = $images[0]['image'];
+            }
+        }
+        return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $products ];
     }
 
     public  function getSingleProduct($product_id){
