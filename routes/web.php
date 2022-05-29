@@ -18,7 +18,7 @@
         });
 
         $router->post('/login',['uses' => 'AuthController@login', 'as' => 'login']);
-        $router->post('/token-refresh',['uses' => 'AuthController@refresh', 'as' => 'refreshToken']);
+        $router->get('/token-refresh',['uses' => 'AuthController@refresh', 'as' => 'refreshToken']);
         $router->post('/register',['uses' => 'AuthController@register', 'as' => 'register']);
         $router->get('/products',['uses' => 'ProductController@index', 'as' => 'getAllProducts']);
         $router->get('/product/{product_id}',['uses' => 'ProductController@getSingleProduct', 'as' => 'getSingleProducts']);
