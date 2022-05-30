@@ -7,6 +7,7 @@ use App\Models\billing_address;
 use App\Models\user_role;
 use Illuminate\Http\Request;
 use \App\Models\User;
+use phpDocumentor\Reflection\Types\Integer;
 
 class userController extends Controller
 {
@@ -57,14 +58,17 @@ class userController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getUser($user_id)
+    public function getUser(Int $user_id)
     {
-        $user = User::find($user_id);
+        $authUser = auth()->user();
+        if($user_id !== $authUser->id){
+            return response(["status" => 401,"desc"=>'You must be logged in as that user'], 401);
+        }
 
+        $user = User::find($user_id);
         if (is_null($user)){
             return ['status' => 200, 'desc' => 'user not found'];
         }
-
 //        add billing info to response
            $billingInfo = $this->getUserBillingInfo($user->id);
             if( $billingInfo['status'] === 200){
@@ -72,7 +76,6 @@ class userController extends Controller
             }else{
                 $billingInfo =  $billingInfo['desc'];
             }
-
         $user['billing'] =  $billingInfo;
 
         return ['status' => 200, 'desc' => 'User fetched successfully', 'data'=> $user];
