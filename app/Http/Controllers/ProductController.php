@@ -68,13 +68,8 @@ class ProductController extends Controller
 //
         $productPayload = [
             'title' => $request->title,
-            'price' => $pieces[0]["price"][0],
             'description' => $request->description,
-            'offer_price' => $pieces[0]["price"][1],
-            'discount' => $pieces[0]["discount"][0],
             'status' => $request->status,
-            'weight' => $pieces[0]['weight'],
-            'packaging' => $pieces[0]['packaging'],
 //            'photo' => $request->file('image'),
 //            'photoCheck' => $request->hasFile('image'),
 //            'pdf' => $request->file('pdf'),
@@ -85,6 +80,17 @@ class ProductController extends Controller
             'surface' => $request->surface,
             'uses' => $request->uses,
         ];
+
+        if(isset($pieces)){
+            $productPayload['price'] = $pieces[0]["price"][0];
+            $productPayload['offer_price'] = $pieces[0]["price"][1];
+            $productPayload['discount'] = $pieces[0]["discount"][0];
+            $productPayload['weight'] = $pieces[0]['weight'];
+            $productPayload['packaging'] = $pieces[0]['packaging'];
+        }else{
+            $productPayload['price'] = 0;
+            $productPayload['brand_id'] = 1;
+        }
 
 
 //
