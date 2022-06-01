@@ -17,9 +17,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all(["id","title","description","price","offer_price","photo","status","updated_at"]);
+        $products = product::with('category')->get(["id","title","description","price","offer_price","photo","status","updated_at"]);
         foreach ($products as &$product ){
             $images = product::find($product->id)->images;
+            $categories = product::find($product->id)->images;
             $images = $images->toArray();
             $product['photo'] = "https://via.placeholder.com/150";
             if(!empty($images)){

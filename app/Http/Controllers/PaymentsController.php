@@ -74,8 +74,10 @@ class PaymentsController extends Controller
             'line_items' =>
                 [$stripeProducts],
             'mode' => 'payment',
-            'success_url' => env("APP_URL").'/api/payment/success/'.$trans['trans_id']."/".$order["id"],
-            'cancel_url' => env("APP_URL").'/api/payment/cancel',
+//            'success_url' => env("APP_URL").'/api/payment/success/'.$trans['trans_id']."/".$order["id"],
+            'success_url' => env("FRONTEND_APP_URL").'/api/payment/success/'.$trans['trans_id']."/".$order["id"],
+//            'cancel_url' => env("APP_URL").'/api/payment/cancel',
+            'cancel_url' => env("FRONTEND_APP_URL").'/shop/cart',
         ]);
 
         $paymentT = payments::find($trans['id']);
