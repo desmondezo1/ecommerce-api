@@ -57,7 +57,7 @@ class ProductController extends Controller
     {
 //        return $request->all();
         $validatedData = $this->validate($request,[
-            'title' => ['required','unique:Products,title'],
+            'title' => ['required','unique:products,title'],
 //            'price' => 'required',
             'description' => 'required',
         ]);
