@@ -192,31 +192,151 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'title' => 'String',
-            'price' => 'Numeric',
-            'description' => 'String',
-            'offer_price' => 'Numeric',
-            'discount' => 'Numeric' ,
-            'status' => 'String',
-            'category_id' => 'Numeric'
-        ]);
 
         $product = Product::find($id);
+
+        $prodImages = productImages::where('product_id',$id)->get();
+        $productPayload = [];
+
         if (is_null($product)){
             return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
         }
+
+
+        $pieces = json_decode($request->pieces,true);
+        $tag =  json_decode($request->tag);
+        $categories =  json_decode($request->category);
+//
+        if(isset($pieces)){
+            $productPayload['price'] = $pieces[0]["price"][0];
+            $productPayload['offer_price'] = $pieces[0]["price"][1];
+            $productPayload['discount'] = $pieces[0]["discount"][0];
+            $productPayload['weight'] = $pieces[0]['weight'];
+            $productPayload['packaging'] = $pieces[0]['packaging'];
+        }else{
+            $productPayload['price'] = 0;
+            $productPayload['brand_id'] = 1;
+        }
+
+        try {
+
+
+            if ($request->hasFile('pdf')) {
+                $original_filename = $request->file('pdf')->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = 'public/uploads/products/pdf';
+                $pdf = 'U-' . time() . '.' . $file_ext;
+
+                if ($request->file('pdf')->move($destination_path, $pdf)) {
+                    $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $pdf;
+                } else {
+                    return $this->responseRequestError('Cannot upload file');
+                }
+            }
+
+        }catch (\Exception $e){
+            echo $e->getMessage();
+        }
+
+
         isset($request->title) ? $product->title = $request->title: false;
-        isset($request->price) ? $product->price = $request->price: false;
+        isset($productPayload['price']) ? $product->price = $productPayload['price']: false;
         isset($request->description) ? $product->description = $request->description: false;
-        isset($request->offer_price) ? $product->offer_price = $request->offer_price: false;
+        isset($productPayload['offer_price']) ? $product->offer_price = $productPayload['offer_price']: false;
         isset($request->photo) ? $product->photo = $request->photo: false;
-        isset($request->discount) ?  $product->discount = $request->discount : false;
+        isset($productPayload['discount']) ?  $product->discount = $productPayload['discount'] : false;
         isset($request->status) ? $product->status = $request->status: false;
+        isset($request->tag) ? $product->tag = $request->tag: false;
+        isset($request->volume) ? $product->volume = $request->volume: false;
+        isset($productPayload['weight']) ? $product->weight = $productPayload['weight']: false;
+        isset($request->surface) ? $product->surface = $request->surface: false;
+        isset($request->uses) ? $product->uses = $request->uses: false;
+        isset($request->brand_id) ? $product->brand_id = $request->brand_id: false;
         isset($request->category_id) ? $product->category_id = $request->category_id: false;
+        isset($productPayload['packaging']) ? $product->packaging = $productPayload['packaging']: false;
         $product->save();
 
-        return ['status' => 200, 'desc' => 'Product Item has been updated', 'data' => $product ];
+        try {
+            if (!empty($pieces)){
+                try {
+                    $piecesResult = Pieces::where('product_id',$id)->delete();
+                }catch(\Exception $e){
+
+                }
+
+                foreach ( $pieces as $piece){
+                    $pieceAdded = Pieces::create([
+                        'product_id' =>  $product->id,
+                        'title' => $product->title,
+                        'category_id' => $product->category_id,
+                        'description' => $product->description,
+                        'packaging' => $piece['packaging'],
+                        'weight' => $piece['weight'],
+                        'photo' => $product->photo,
+                        'brand_id' => $product->brand_id,
+                        'price' => $piece['price'][0],
+                        'stock_status' => 'instock',
+                        'offer_price' => $piece['price'][1],
+                        'instock_quantity' => 10,
+                        'discount' => $piece['discount'][0],
+                        'status' => $product->status
+                    ]);
+                }
+            }
+        }catch(\Exception $e){
+
+        }
+
+
+        //Add product
+        $imagePayload = [];
+        if ($request->has('image')){
+
+            //Delete existing images
+            if ($prodImages){
+                foreach ($prodImages as $prodImg){
+                    try {
+                        unlink($prodImg->image);
+                    }catch (\Exception $e){
+                    }
+                }
+            }
+
+
+            foreach ( $request->file('image') as $photo) {
+                $original_filename = $photo->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = 'public/uploads/products/';
+                $image = 'U-' . time() . '.' . $file_ext;
+                if ($photo->move($destination_path, $image)) {
+                    $imagePayload[]['image'] =  url('/') . '/public/uploads/products/' . $image;
+                } else {
+                    return $this->responseRequestError('Cannot upload file');
+                }
+            }
+        }
+
+
+        if(!empty($imagePayload)){
+            foreach ($imagePayload as $img){
+                $prodImage = productImages::create([
+                    'product_id' => $product->id,
+                    'image' => $img['image'],
+                ]);
+            }
+        }
+
+
+        try {
+            $prd = product::find($product->id);
+            $prd->category()->attach($categories);
+        }catch (\Exception $e){
+            echo $e->getMessage();
+        }
+
+        return ['status' => 200, 'desc' => 'Product updated successfully', 'data'=> $product ];
 
     }
 

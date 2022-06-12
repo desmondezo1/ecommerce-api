@@ -63,6 +63,7 @@
                 $router->group(['prefix' => 'cart'],function () use ($router) {
                     $router->get('/{user_id}', ['uses' => 'CartController@index', 'as' => 'getUserCart']);
                     $router->post('/', ['uses' => 'CartController@addItemToCart', 'as' => 'addToCart']);
+                    $router->post('/bulk', ['uses' => 'CartController@addItemsToCart', 'as' => 'addManyToCart']);
                     $router->patch('/{user_id}/product/{product_id}', ['uses' => 'CartController@update', 'as' => 'updateProductQuantityInCart']);
                     $router->delete('/{user_id}/product/{product_id}', ['uses' => 'CartController@deleteItemFromCart', 'as' => 'deleteProductFromCart']);
                     $router->delete('/{user_id}', ['uses' => 'CartController@destroy', 'as' => 'emptyUserCart']);
@@ -81,6 +82,7 @@
 
                 //ORDERS
                 $router->get('/orders', ['uses' => 'OrderController@index', 'as' => 'getAllOrders']);
+                $router->patch('/order/{order_id}', ['uses' => 'OrderController@updateOrder', 'as' => 'updateOrders']);
 
                 //PRODUCTS
                 $router->group(['prefix' => 'products'],function () use ($router) {

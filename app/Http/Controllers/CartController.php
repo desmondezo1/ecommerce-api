@@ -56,6 +56,40 @@ class CartController extends Controller
 
     }
 
+
+    public function addItemsToCart(Request $request){
+        $cart = [];
+        $carrt = $request->all();
+//        return $carrt;
+        foreach ($carrt as $req){
+
+            $product = product::find($req['product_id']);
+            if(is_null($product)){
+                return ['status' => 401, 'desc' => 'Product doesnt exist'];
+            }
+
+//            $prodCart = cart::where('user_id', $req['user_id'])->where('product_id', $req['product_id'])->first();
+//
+//            if (!is_null($prodCart)){
+//                $prodCart->quantity +=  1;
+//                $prodCart->save();
+//                return response('Item Quantity Updated',200);
+//            }
+
+            try {
+                $cart[] = cart::create([
+                    'product_id' => $req['product_id'],
+                    'user_id' => $req['user_id'],
+                    'price' => $req['price'],
+                    'quantity' =>  $req['quantity'],
+                ]);
+            }catch (\Exception $e){
+                return $e->getMessage();
+            }
+
+        }
+        return response()->json($cart, 200);
+    }
     /**
      *
      *

@@ -172,9 +172,18 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $order_id){
+    public function updateOrder(Request $request, $order_id){
 
+        $order = order::find($order_id);
+        if(!$order){
+            return response()->json(["msg" => "order invalid"], 402);
+        }
 
+        if($request->status){
+            $order->status = $request->status;
+        }
+
+        return ['status' => 200, 'desc' => 'Order created successfully', 'data'=> $order->save()];
     }
 
     /**
