@@ -86,7 +86,7 @@
 
                 //PRODUCTS
                 $router->group(['prefix' => 'products'],function () use ($router) {
-                    $router->patch('/{id}',['uses' => 'ProductController@update', 'as' => 'updateProduct']);
+                    $router->post('/update/{id}',['uses' => 'ProductController@update', 'as' => 'updateProduct']);
                     $router->post('/create',['uses' => 'ProductController@create', 'as' => 'createProduct']);
                     $router->delete('/{id}',['uses' => 'ProductController@destroy', 'as' => 'deleteProduct']);
                 });
