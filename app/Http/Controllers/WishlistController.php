@@ -47,6 +47,11 @@ class WishlistController extends Controller
 
         $user = User::find($user_id);
         $product = product::find($request->product_id);
+        $prodInWish = Wishlist::where("product_id", $request->product_id)->first();
+
+        if (is_null($prodInWish)){
+            return ['status' => 200, 'desc' => 'Product added to wishlist', 'data'=> $prodInWish ];
+        }
 
         if(is_null($user) || is_null($product)){
             return ['status' => 500, 'desc' => 'Invalid User / Product' ];
