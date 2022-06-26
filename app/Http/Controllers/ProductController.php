@@ -105,7 +105,7 @@ class ProductController extends Controller
                 $pdf = 'U-' . time() . '.' . $file_ext;
 
                 if ($request->file('pdf')->move($destination_path, $pdf)) {
-                    $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $pdf;
+                    $productPayload['pdf'] = url('/').'/public/public/uploads/products/pdf/' . $pdf;
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
@@ -152,7 +152,7 @@ class ProductController extends Controller
                 $destination_path = 'public/uploads/products/';
                 $image = 'U-' . time() . '.' . $file_ext;
                 if ($photo->move($destination_path, $image)) {
-                    $imagePayload[]['image'] =  url('/') . '/public/uploads/products/' . $image;
+                    $imagePayload[]['image'] =  url('/') . '/public/public/uploads/products/' . $image;
 //                    $productPayload['photo'] = url('/') . '/public/uploads/products/' . $image;
                 } else {
                     return $this->responseRequestError('Cannot upload file');
@@ -229,7 +229,7 @@ class ProductController extends Controller
                 $pdf = 'U-' . time() . '.' . $file_ext;
 
                 if ($request->file('pdf')->move($destination_path, $pdf)) {
-                    $productPayload['pdf'] = url('/').'/public/uploads/products/pdf/' . $pdf;
+                    $productPayload['pdf'] = url('/').'/public/public/uploads/products/pdf/' . $pdf;
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
@@ -311,7 +311,7 @@ class ProductController extends Controller
                 $destination_path = 'public/uploads/products/';
                 $image = 'U-' . time() . '.' . $file_ext;
                 if ($photo->move($destination_path, $image)) {
-                    $imagePayload[]['image'] =  url('/') . '/public/uploads/products/' . $image;
+                    $imagePayload[]['image'] =  url('/') . '/public/public/uploads/products/' . $image;
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
