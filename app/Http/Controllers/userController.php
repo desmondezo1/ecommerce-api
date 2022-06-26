@@ -324,6 +324,7 @@ class userController extends Controller
      */
     public function destroy($id)
     {
+
         $user = User::find($id);
         if($user->role == 2 || $user->role == 4){
             return ['status' => 500, 'desc' => 'You don\'t have permission to delete this user' ];
@@ -333,11 +334,12 @@ class userController extends Controller
             return ['status' => 500, 'desc' => 'user wasn\'t found' ];
         }
 
-        $user->status = "inactive";
-        $user->save();
+        $us = User::destroy($id);
+        if (!$us){
+            return ['status' => 500, 'desc' => 'User was not deleted' ];
+        }
 
-        return ['status' => 200, 'desc' => 'user has been inactivated successfully', 'data' => $user->status ];
-
+        return ['status' => 200, 'desc' => 'User has been deleted successfully' ];
 
     }
 }
