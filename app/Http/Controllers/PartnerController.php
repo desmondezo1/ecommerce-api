@@ -51,7 +51,7 @@ class PartnerController extends Controller
                 $image = 'U-' . time() . '.' . $file_ext;
 
                 if ($request->file('photo')->move($destination_path, $image)) {
-                    $payload['photo'] = url('/') . '/public/uploads/brands/' . $image;
+                    $payload['photo'] = url('/') . '/public/public/uploads/brands/' . $image;
                 } else {
                     return $this->responseRequestError('Cannot upload file');
                 }
@@ -138,8 +138,15 @@ class PartnerController extends Controller
      * @param  \App\Models\partner  $partner
      * @return \Illuminate\Http\Response
      */
-    public function destroy(partner $partner)
+    public function destroy($id)
     {
-        //
+        $brand = partner::destroy($id);
+
+        if (!$brand){
+            return ['status' => 500, 'desc' => 'Brand Item was not deleted' ];
+        }
+
+        return ['status' => 200, 'desc' => 'Brand has been deleted successfully' ];
+
     }
 }
