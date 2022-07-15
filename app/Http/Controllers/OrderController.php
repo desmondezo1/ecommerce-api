@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\cart;
 use App\Models\order;
 use App\Models\order_items;
+use App\Models\pricingTable;
 use App\Models\product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -164,11 +165,30 @@ class OrderController extends Controller
 
     }
 
-    public function calculateShippingFromWeight(Request $request){
-        //get weight array or object from db;
-        //get the single item weight from db;
-        //check for corresponding cost and multiply by qty
-        // add all shipping costs together
+    public function calculateShippingFromWeight($user_id){
+
+        $userCart = cart::where('user_id', $user_id)->get();
+        $arrOfWeight = [];
+        $costArr = [];
+
+        foreach ($userCart as $cartItem){
+            $item = product::find($cartItem->product_id);
+            $arrOfWeight[] = $item->volume;
+
+        }
+
+        foreach ($arrOfWeight as $weight) {
+            $cost = pricingTable::where('max_weight', '<=', $weight)->where('min_weight', '>=', $weight);
+            $costArr[] = (int)$cost->value('price');
+        }
+
+        $sumCost = 0;
+        foreach ($costArr as $p){
+            $sumCost += $p;
+        }
+
+        return $sumCost;
+
     }
     /**
      * Update the specified resource in storage.
