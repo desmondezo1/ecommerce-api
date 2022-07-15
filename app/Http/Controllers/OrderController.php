@@ -171,10 +171,17 @@ class OrderController extends Controller
         $arrOfWeight = [];
         $costArr = [];
 
+        if(!$userCart){
+            return response()->json(["msg" => "Cart is empty invalid"], 500);
+        }
+
         foreach ($userCart as $cartItem){
             $item = product::find($cartItem->product_id);
             $arrOfWeight[] = $item->volume;
+        }
 
+        if(empty($arrOfWeight)){
+            return response()->json(["msg" => "Weight not found"], 500);
         }
 
         foreach ($arrOfWeight as $weight) {
@@ -187,7 +194,7 @@ class OrderController extends Controller
             $sumCost += $p;
         }
 
-        return $sumCost;
+        return response()->json(["data" => $sumCost], 200);
 
     }
     /**
