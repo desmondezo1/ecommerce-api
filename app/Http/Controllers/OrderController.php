@@ -91,13 +91,13 @@ class OrderController extends Controller
         $delivery_charge = 0;
         $products = [];
 
-        $this->validate($request,[
-            'user_id' => ['Required'],
-            'shipping_type' => ['Required', 'Integer', 'exists:shipping_types,id'],
-            'delivery_charge' => ['Required','Numeric'],
-            'status' => ['Required','Integer','exists:order_status,id'],
-            'payment_method' => ['Required', 'Integer'],
-        ]);
+//        $this->validate($request,[
+//            'user_id' => ['Required'],
+//            'shipping_type' => ['Required', 'Integer', 'exists:shipping_types,id'],
+//            'delivery_charge' => ['Required','Numeric'],
+//            'status' => ['Required','Integer','exists:order_status,id'],
+//            'payment_method' => ['Required', 'Integer'],
+//        ]);
 
         $user = User::find($request->user_id);
 
