@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = product::with('category')->get(["id","title","description","price","offer_price","photo","status","updated_at"]);
+        $products = product::with('category')->get(["id","title","description","discount","price","offer_price","photo","status","updated_at"]);
         foreach ($products as &$product ){
             $images = product::find($product->id)->images;
             $categories = product::find($product->id)->images;

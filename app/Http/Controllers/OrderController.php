@@ -159,12 +159,17 @@ class OrderController extends Controller
             }
         }
         cart::where('user_id',$user->id)->delete(); //delete cart when user creates order.
-        return ['status' => 200, 'desc' => 'Order created successfully', 'data'=> $order];
+        return ['8' => 200, 'desc' => 'Order created successfully', 'data'=> $order];
 
 
     }
 
-
+    public function calculateShippingFromWeight(Request $request){
+        //get weight array or object from db;
+        //get the single item weight from db;
+        //check for corresponding cost and multiply by qty
+        // add all shipping costs together
+    }
     /**
      * Update the specified resource in storage.
      *
