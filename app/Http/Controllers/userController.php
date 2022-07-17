@@ -196,7 +196,7 @@ class userController extends Controller
 
     public function updateBillingAddress(Request $request, $user_id){
         $this->validate($request, [
-//            "is_company" => ['Boolean'],
+            "is_company" => ['Boolean'],
             "first_name" => ['String'],
             "last_name" => ['String'],
             "company_name" => ['String'],
