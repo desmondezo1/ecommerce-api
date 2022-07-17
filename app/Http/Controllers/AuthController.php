@@ -59,7 +59,7 @@ class AuthController extends Controller
             'state' => 'required|string',
             'city' => 'required|string',
             'address' => 'required|string',
-            'phone' => 'required|Integer',
+            'phone' => 'required',
             'photo' => 'required|string',
             'country' => 'required|string',
             'role' => ['Integer','exists:user_roles,id'],
