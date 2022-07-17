@@ -85,7 +85,6 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-        return $request;
 
         $uuid = Uuid::uuid4();
         $total_amount = 0;
