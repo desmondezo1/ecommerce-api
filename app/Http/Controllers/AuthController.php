@@ -46,7 +46,8 @@ class AuthController extends Controller
             return  ['status' => '406', 'desc' =>'Password Must be 8 characters or more'];
         }
 
-        if (User::where('email', '=', $request->email)->exists() OR User::where('phone', '=', $request->phone)->exists()){
+//        if (User::where('email', '=', $request->email)->exists() OR User::where('phone', '=', $request->phone)->exists()){
+        if (User::where('email', '=', $request->email)->exists()){
             return  ['status' => '406', 'desc' =>'User already exists'];
         }
 
