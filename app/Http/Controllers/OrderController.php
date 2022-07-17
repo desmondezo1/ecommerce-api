@@ -160,7 +160,7 @@ class OrderController extends Controller
             }
         }
         cart::where('user_id',$user->id)->delete(); //delete cart when user creates order.
-        return ['8' => 200, 'desc' => 'Order created successfully', 'data'=> $order];
+        return ['status' => 200, 'desc' => 'Order created successfully', 'data'=> $order];
 
 
     }
