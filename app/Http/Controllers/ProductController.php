@@ -277,7 +277,7 @@ class ProductController extends Controller
                         'brand_id' => $product->brand_id,
                         'price' => $piece['price'][0],
                         'stock_status' => 'instock',
-                        'offer_price' => $piece['price'][1],
+                        'offer_price' => $piece['offer_price'][0],
                         'instock_quantity' => 10,
                         'discount' => $piece['discount'][0],
                         'status' => $product->status
