@@ -30,7 +30,7 @@ class PaymentsController extends Controller
             if(!is_null($product)){
               $rr =  [
                     'price_data' => [
-                        'currency' => 'ngn',
+                        'currency' => 'EUR',
                         'product_data' => [
                             'name' => $product['title'],
                         ],
