@@ -209,7 +209,7 @@ class ProductController extends Controller
 //
         if(isset($pieces)){
             $productPayload['price'] = $pieces[0]["price"][0];
-            $productPayload['offer_price'] = $pieces[0]["price"][1];
+            $productPayload['offer_price'] = $pieces[0]["offer_price"][0];
             $productPayload['discount'] = $pieces[0]["discount"][0];
             $productPayload['weight'] = $pieces[0]['weight'];
             $productPayload['packaging'] = $pieces[0]['packaging'];
