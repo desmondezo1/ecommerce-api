@@ -46,6 +46,7 @@
 
         //Auth Middleware
         $router->group(['middleware' => 'auth'], function () use ($router){
+            $router->patch('/order/{order_id}', ['uses' => 'OrderController@updateOrder', 'as' => 'updateOrders']);
 
             $router->post('/checkout', ['uses' => 'PaymentsController@checkout', 'as' => 'checkout']);
 

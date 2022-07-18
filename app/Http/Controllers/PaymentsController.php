@@ -86,7 +86,7 @@ class PaymentsController extends Controller
         $paymentT->stripe_payment_currency = $session['currency'];
         $paymentT->stripe_payment_id = $session['id'];
         $paymentT->save();
-        return  $session['url'] ;
+        return  ['status' => 200, 'url'=> $session['url']];
 
     }
 
