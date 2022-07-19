@@ -7,7 +7,7 @@ use App\Models\Pieces;
 use App\Models\product;
 use App\Models\productImages;
 use Illuminate\Http\Request;
-use Illuminate\Http\File;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
