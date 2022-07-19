@@ -364,4 +364,26 @@ class ProductController extends Controller
         return ['status' => 200, 'desc' => 'Product Item has been deleted successfully' ];
 
     }
+
+    public function deleteImage($imageId){
+        //find image
+        $image = productImages::find($imageId);
+        if (!$image){
+            return ['status' => 500, 'desc' => 'File Item was not deleted' ];
+        }
+        $relPath = str_replace(url('/'), "",$image->image);
+        if(File::exists($relPath)) {
+           File::delete($relPath);
+            try {
+                $reult =$image->delete();
+            }catch (\Exception $e){
+                return ['status' => 500, 'desc' => 'File Item was not deleted : '.$e->getMessage() ];
+            }
+
+            return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ];
+        }
+
+        return ['status' => 400, 'desc' => 'File Item not found' ];
+
+    }
 }
