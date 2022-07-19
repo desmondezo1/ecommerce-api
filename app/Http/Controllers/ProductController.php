@@ -372,9 +372,9 @@ class ProductController extends Controller
             return ['status' => 500, 'desc' => 'File Item was not found' ];
         }
         $relPath = str_replace(url('/'), "",$image->image);
-        return File::exists('/public/'.$relPath);
-        if(File::exists($relPath)) {
-           File::delete($relPath);
+        return \File::exists('/public/'.$relPath);
+        if(\File::exists($relPath)) {
+           \File::delete($relPath);
             try {
                 $reult =$image->delete();
             }catch (\Exception $e){
