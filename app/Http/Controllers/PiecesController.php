@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pieces;
 use Illuminate\Http\Request;
 
-class piecesController extends Controller
+class PiecesController extends Controller
 {
     /**
      * Display a listing of the resource.

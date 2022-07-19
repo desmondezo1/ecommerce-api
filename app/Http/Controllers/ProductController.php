@@ -373,7 +373,7 @@ class ProductController extends Controller
         }
         $relPath = str_replace(url('/'), "",$image->image);
         return public_path($relPath);
-        if(File::exists(public_path($relPath))) {
+        if(File::exists($relPath)) {
            File::delete($relPath);
             try {
                 $reult =$image->delete();
