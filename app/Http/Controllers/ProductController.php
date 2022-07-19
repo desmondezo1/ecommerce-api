@@ -7,6 +7,7 @@ use App\Models\Pieces;
 use App\Models\product;
 use App\Models\productImages;
 use Illuminate\Http\Request;
+use Illuminate\Http\File;
 
 class ProductController extends Controller
 {
@@ -372,8 +373,9 @@ class ProductController extends Controller
             return ['status' => 500, 'desc' => 'File Item was not found' ];
         }
         $relPath = str_replace(url('/'), "",$image->image);
-        return '/public/'.$relPath;
-        if(\File::exists($relPath)) {
+//        return '/public'.$relPath;
+        return File::exists('/public'.$relPath);
+        if(File::exists($relPath)) {
            \File::delete($relPath);
             try {
                 $reult =$image->delete();
