@@ -373,8 +373,7 @@ class ProductController extends Controller
             return ['status' => 500, 'desc' => 'File Item was not found' ];
         }
         $relPath = str_replace(url('/'), "",$image->image);
-//        return '/public'.$relPath;
-        echo File::exists('/public'.$relPath);
+
         if(File::exists($relPath)) {
            File::delete($relPath);
             try {
@@ -382,7 +381,6 @@ class ProductController extends Controller
             }catch (\Exception $e){
                 return ['status' => 500, 'desc' => 'File Item was not deleted : '.$e->getMessage() ];
             }
-
             return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ];
         }else{
             $image->delete();
