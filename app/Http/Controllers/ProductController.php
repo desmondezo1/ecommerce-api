@@ -369,7 +369,7 @@ class ProductController extends Controller
         //find image
         $image = productImages::find($imageId);
         if (!$image){
-            return ['status' => 500, 'desc' => 'File Item was not deleted' ];
+            return ['status' => 500, 'desc' => 'File Item was not found' ];
         }
         $relPath = str_replace(url('/'), "",$image->image);
         if(File::exists($relPath)) {
@@ -381,9 +381,12 @@ class ProductController extends Controller
             }
 
             return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ];
+        }else{
+            $image->delete();
+            return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ];
         }
 
-        return ['status' => 400, 'desc' => 'File Item not found' ];
+
 
     }
 }
