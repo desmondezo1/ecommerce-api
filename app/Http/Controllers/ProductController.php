@@ -370,7 +370,7 @@ class ProductController extends Controller
         //find image
         $image = productImages::find($imageId);
         if (!$image){
-            return ['status' => 500, 'desc' => 'File Item was not found' ];
+            return ['status' => 500, 'desc' => 'File Item was not found','data'=>['status' => 500, 'desc' => 'File Item was not found'] ];
         }
         $relPath = str_replace(url('/'), "",$image->image);
 
@@ -379,15 +379,13 @@ class ProductController extends Controller
             try {
                 $reult =$image->delete();
             }catch (\Exception $e){
-                return ['status' => 500, 'desc' => 'File Item was not deleted : '.$e->getMessage() ];
+                return ['status' => 500, 'desc' => 'File Item was not deleted : '.$e->getMessage() ,'data'=>['status' => 500, 'desc' => 'File Item was not deleted : '.$e->getMessage()]];
             }
-            return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ];
+            return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ,"data" => ['status' => 200, 'desc' => 'File Item has been deleted successfully']];
         }else{
             $image->delete();
-            return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ];
+            return ['status' => 200, 'desc' => 'File Item has been deleted successfully' ,"data" => ['status' => 200, 'desc' => 'File Item has been deleted successfully']];
         }
-
-
 
     }
 }
