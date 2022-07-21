@@ -15,13 +15,13 @@ class orderStatusTableSeeder extends Seeder
     public function run()
     {
        $statuses = [
-                        ['status' => 'PENDING_APPROVAL'],
-                        ['status' => 'AWAITING_PAYMENT'],
-                        ['status' => 'PROCESSING'],
-                        ['status' => 'SHIPPED'],
+                        ['status' => 'RECEIVED'],
                         ['status' => 'CANCELED'],
-                        ['status' => 'REJECTED'],
-                        ['status' => 'COMPLETED'],
+                        ['status' => 'SHIPPED'],
+                        ['status' => 'PENDING'],
+//                        ['status' => 'CANCELED'],
+//                        ['status' => 'REJECTED'],
+//                        ['status' => 'COMPLETED'],
                     ];
 
         foreach ($statuses as $status){
