@@ -321,9 +321,9 @@ class userController extends Controller
         if (!$user){
             return Response::status(400)->json(['desc'=>'User not found']);
         }
-        if ($request->status !== "active" || $request->status !== "inactive"){
-            return Response::status(400)->json(['desc'=>'invalid status type']);
-        }
+//        if ($request->status !== "active" || $request->status !== "inactive"){
+//            return Response::status(400)->json(['desc'=>'invalid status type']);
+//        }
 
         $user->status  = $request->status;
         $user->save();
