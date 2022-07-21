@@ -327,6 +327,7 @@ class userController extends Controller
 
         $user->status  = $request->status;
         $user->save();
+        return ['status' => 200, 'desc' => 'Users updated', 'data'=> $user];
 
     }
     /**
