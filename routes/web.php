@@ -81,6 +81,7 @@
                 $router->post('user/create',['uses' => 'userController@create', 'as' => 'createUser']);
                 $router->delete('user/{id}',['uses' => 'userController@destroy', 'as' => 'deleteUser']);
                 $router->patch('user/{user_id}',['uses' => 'userController@updateUserRole', 'as' => 'updateUserRole']);
+                $router->patch('user/{user_id}/status',['uses' => 'userController@updateUserStatus', 'as' => 'updateUserStatus']);
 
                 //ORDERS
                 $router->get('/orders', ['uses' => 'OrderController@index', 'as' => 'getAllOrders']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\UserRole;
 use App\Models\billing_address;
 use App\Models\user_role;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use \App\Models\User;
 use phpDocumentor\Reflection\Types\Integer;
@@ -315,7 +316,19 @@ class userController extends Controller
 
     }
 
+    public function updateUserStatus(Request $request, $user_id){
+        $user = User::find($user_id);
+        if (!$user){
+            return Response::status(400)->json(['desc'=>'User not found'])
+        }
+        if ($request->status !== "active" || $request->status !== "inactive"){
+            return Response::status(400)->json(['desc'=>'invalid status type']);
+        }
 
+        $user->status  = $request->status;
+        $user->save();
+
+    }
     /**
      * Remove the specified resource from storage.
      *
