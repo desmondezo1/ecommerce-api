@@ -319,7 +319,7 @@ class userController extends Controller
     public function updateUserStatus(Request $request, $user_id){
         $user = User::find($user_id);
         if (!$user){
-            return Response::status(400)->json(['desc'=>'User not found'])
+            return Response::status(400)->json(['desc'=>'User not found']);
         }
         if ($request->status !== "active" || $request->status !== "inactive"){
             return Response::status(400)->json(['desc'=>'invalid status type']);
