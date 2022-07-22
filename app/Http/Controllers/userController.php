@@ -123,11 +123,11 @@ class userController extends Controller
             'email' => ['required','email'],
             'phone' => ['required', 'Integer'],
             'password' => ['required', 'String'],
-            'address' => ['required', 'String'],
+            'address' => [ 'String'],
             'state' => 'string',
             'city' => 'string',
             'country' => 'string',
-            'photo' => 'required|string',
+            'photo' => 'string',
             'role'=> ['required', 'Integer', 'exists:user_roles,id']
         ]);
 
