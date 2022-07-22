@@ -347,7 +347,7 @@ class ProductController extends Controller
             return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
         }
 
-        if (!$request->status){
+        if ($request->status){
             $product->status = $request->status;
             return ['status' => 200, 'desc' => 'Product Item updated', 'data'=> $product->save() ];
         }else{
