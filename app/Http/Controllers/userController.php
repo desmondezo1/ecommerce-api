@@ -179,6 +179,7 @@ class userController extends Controller
         if (is_null($user)){
             return ['status' => 500, 'desc' => 'user not found', 'data'=> $user ];
         }
+        return $request;
         isset ($request->first_name) ? $user->first_name = $request->first_name: false;
         isset ($request->last_name) ? $user->last_name = $request->last_name: false;
         isset ($request->email) ? $user->email = $request->email: false;
