@@ -341,6 +341,20 @@ class ProductController extends Controller
 
     }
 
+    public function updateStatus(Request $request, $id){
+        $product = Product::find($id);
+        if (is_null($product)){
+            return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
+        }
+
+        if (!$request->status){
+            $product->status = $request->status;
+            return ['status' => 200, 'desc' => 'Product Item updated', 'data'=> $product->save() ];
+        }else{
+            return ['status' => 500, 'desc' => 'Payload can\'t be empty', 'data'=> null ];
+        }
+
+    }
     public function downloadPdf(Request $request){
         $path = $request->path;
         if(!$path){
