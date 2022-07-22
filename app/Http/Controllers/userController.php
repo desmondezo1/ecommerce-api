@@ -356,22 +356,22 @@ class userController extends Controller
     public function destroy($id)
     {
         $authUser = auth()->user();
-
         $user = User::find($id);
-        if($authUser->role !== 2 || $authUser->role !== 4){
+
+        if($authUser->role == 2 || $authUser->role == 4){
+
+            if (!$user){
+                return ['status' => 500, 'desc' => 'user wasn\'t found' ];
+            }
+
+            $us = User::destroy($id);
+            if (!$us){
+                return ['status' => 500, 'desc' => 'User was not deleted' ];
+            }
+
+            return ['status' => 200, 'desc' => 'User has been deleted successfully' ];
+        }else{
             return ['status' => 500, 'desc' => 'You don\'t have permission to delete this user' ];
         }
-
-        if (!$user){
-            return ['status' => 500, 'desc' => 'user wasn\'t found' ];
-        }
-
-        $us = User::destroy($id);
-        if (!$us){
-            return ['status' => 500, 'desc' => 'User was not deleted' ];
-        }
-
-        return ['status' => 200, 'desc' => 'User has been deleted successfully' ];
-
     }
 }
