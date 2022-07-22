@@ -356,7 +356,7 @@ class userController extends Controller
     public function destroy($id)
     {
         $authUser = auth()->user();
-        return $authUser;
+
         $user = User::find($id);
         if($authUser->role !== 2 || $authUser->role !== 4){
             return ['status' => 500, 'desc' => 'You don\'t have permission to delete this user' ];
