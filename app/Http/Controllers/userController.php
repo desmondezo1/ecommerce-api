@@ -83,6 +83,22 @@ class userController extends Controller
 
     }
 
+    public function getUserAsAdmin(Int $user_id){
+        $user = User::find($user_id);
+        if (is_null($user)){
+            return ['status' => 200, 'desc' => 'user not found'];
+        }
+//        add billing info to response
+        $billingInfo = $this->getUserBillingInfo($user->id);
+        if( $billingInfo['status'] === 200){
+            $billingInfo =  $billingInfo['data'];
+        }else{
+            $billingInfo =  $billingInfo['desc'];
+        }
+        $user['billing'] =  $billingInfo;
+
+        return ['status' => 200, 'desc' => 'User fetched successfully', 'data'=> $user];
+    }
 
     public function getUserBillingInfo($user_id){
 
@@ -321,9 +337,7 @@ class userController extends Controller
         if (!$user){
             return Response::status(400)->json(['desc'=>'User not found']);
         }
-//        if ($request->status !== "active" || $request->status !== "inactive"){
-//            return Response::status(400)->json(['desc'=>'invalid status type']);
-//        }
+
 
         $user->status  = $request->status;
         $user->save();

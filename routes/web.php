@@ -77,6 +77,7 @@
 
                 //USERS
                 $router->get('/users',['uses' => 'userController@index', 'as' => 'getAllUsers']);
+                $router->get('/user/{user_id}',['uses' => 'userController@getUserAsAdmin', 'as' => 'getUserAsAdmin']);
                 $router->get('/admins',['uses' => 'userController@getAdmins', 'as' => 'getAllAdminUsers']);
                 $router->post('user/create',['uses' => 'userController@create', 'as' => 'createUser']);
                 $router->delete('user/{id}',['uses' => 'userController@destroy', 'as' => 'deleteUser']);
