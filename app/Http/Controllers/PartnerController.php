@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\partner;
 use App\Models\product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PartnerController extends Controller
 {
@@ -140,6 +141,17 @@ class PartnerController extends Controller
      */
     public function destroy($id)
     {
+        $b = partner::find($id);
+        if (!$b){
+            return ['status'=> 400, 'desc'=>'brand not found'];
+        }
+
+        $relPath = str_replace(url('/'), "",$b->photo);
+
+        if(File::exists($relPath)) {
+            File::delete($relPath);
+        }
+
         $brand = partner::destroy($id);
 
         if (!$brand){
