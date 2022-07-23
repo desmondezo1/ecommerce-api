@@ -28,7 +28,7 @@ class ProductsTable extends Migration
             $table->string('volume')->nullable();
             $table->string('pdf')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
-            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('set null');
             $table->float('price');
             $table->enum('stock_status',['outofstock','instock'])->default('instock');
             $table->float('offer_price')->nullable();
