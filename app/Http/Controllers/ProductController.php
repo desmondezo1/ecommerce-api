@@ -20,6 +20,8 @@ class ProductController extends Controller
     {
         $products = product::with('category')->get(["id","title","description","discount","price","offer_price","photo","status","updated_at"]);
         foreach ($products as &$product ){
+            if ($product->status == "unpublished"){ continue;}
+
             $images = product::find($product->id)->images;
             $categories = product::find($product->id)->images;
             $images = $images->toArray();
