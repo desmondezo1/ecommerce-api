@@ -39,6 +39,8 @@ class ProductController extends Controller
 
         if (is_null($product)){
             return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
+        }else if ($product->status == "unpublished"){
+            return ['status' => 500, 'desc' => 'Product Item not found', 'data'=> null ];
         }
 
         $product['images'] = product::find($product->id)->images;
