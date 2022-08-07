@@ -37,7 +37,7 @@ class OrderController extends Controller
             return ['status' => 500, 'desc' => 'Order not found' ];
         }
         $prd_details=[];
-        )
+
         $prods = json_decode($order->product_id, true);
          for ($i = 0; count($prods) > $i; $i++){
             $prd_details[] = product::find($prods[$i]->id);
