@@ -39,9 +39,9 @@ class OrderController extends Controller
         $prd_details=[];
 
         $prods = json_decode($order->product_id, true);
-        return $prods;
+        return $prods[0]['id'];
          for ($i = 0; count($prods) > $i; $i++){
-            $prd_details[] = product::find($prods[$i]->id);
+            $prd_details[] = product::find($prods[$i]['id']);
          }
          $order['prd_details'] = $prd_details;
         return ['status' => 200, 'desc' => 'Order fetched successfully', 'data'=> $order ];
