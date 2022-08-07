@@ -44,6 +44,7 @@ class OrderController extends Controller
             $prd_details[] = product::find($prods[$i]['id']);
          }
          $order['prd_details'] = $prd_details;
+
         return ['status' => 200, 'desc' => 'Order fetched successfully', 'data'=> $order ];
     }
 
