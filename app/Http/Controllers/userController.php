@@ -8,6 +8,7 @@ use App\Models\user_role;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use \App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Integer;
 
 class userController extends Controller
@@ -374,4 +375,12 @@ class userController extends Controller
             return ['status' => 500, 'desc' => 'You don\'t have permission to delete this user' ];
         }
     }
+
+    public function sendMail(Request $request){
+        Mail::to('contratti@mcsgroupsrl.com')
+            ->cc($moreUsers)
+            ->bcc($evenMoreUsers)
+            ->send(new OrderShipped($order));
+    }
+
 }
