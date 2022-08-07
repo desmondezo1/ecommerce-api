@@ -39,6 +39,7 @@ class OrderController extends Controller
         $prd_details=[];
 
         $prods = json_decode($order->product_id, true);
+        return $prods;
          for ($i = 0; count($prods) > $i; $i++){
             $prd_details[] = product::find($prods[$i]->id);
          }
