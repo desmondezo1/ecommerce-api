@@ -309,6 +309,7 @@ class userController extends Controller
                     "first_name" => $request->first_name,
                     "last_name" => $request->last_name,
                     "company_name" => $request->company_name,
+                    "user_id" => $request->user_id,
                     "address1" => $request->address1,
                     "address2" => $request->address2,
                     "city" => $request->city,
