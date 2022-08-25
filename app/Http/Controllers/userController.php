@@ -250,6 +250,7 @@ class userController extends Controller
             $billInfo->is_company = $request->is_company;
             $billInfo->first_name = $request->first_name;
             $billInfo->last_name = $request->last_name;
+            $billInfo->user_id = $user_id;
             $billInfo->company_name = $request->company_name;
             $billInfo->address1 = $request->address1;
             $billInfo->address2 = $request->address2;
