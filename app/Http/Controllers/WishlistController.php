@@ -49,7 +49,7 @@ class WishlistController extends Controller
         $product = product::find($request->product_id);
         $prodInWish = Wishlist::where("product_id", $request->product_id)->first();
 
-        if (is_null($prodInWish)){
+        if (!is_null($prodInWish)){
             return ['status' => 200, 'desc' => 'Product added to wishlist', 'data'=> $prodInWish ];
         }
 
