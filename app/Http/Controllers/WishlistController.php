@@ -34,7 +34,7 @@ class WishlistController extends Controller
             $prod = product::find($wish['product_id']);
             $pic = productImages::where('product_id', $wish['product_id'])->first();
             if($pic){
-                $prod['photo'] = $pic->image;
+                $prod['photo'] = $pic;
             }
             $list[] = $prod;
         }
