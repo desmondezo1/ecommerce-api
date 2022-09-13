@@ -31,12 +31,12 @@ class WishlistController extends Controller
 
         $list = [];
         foreach ($wishlist as $wish){
-            $list[] = product::find($wish['product_id']);
+            $prod = product::find($wish['product_id']);
             $pic = productImages::where('product_id', $wish['product_id'])->first();
             if($pic){
-                $list['photo'] = $pic->image;
+                $prod['photo'] = $pic->image;
             }
-
+            $list[] = $prod;
         }
 
         return ['status' => 200, 'desc' => 'Wishlist fetched successfully', 'data'=> $list ];
