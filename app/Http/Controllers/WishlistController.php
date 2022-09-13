@@ -33,7 +33,7 @@ class WishlistController extends Controller
         foreach ($wishlist as $wish){
             $list[] = product::find($wish['product_id']);
             $pic = productImages::where('product_id', $wish['product_id'])->first();
-            $list['photo'] = $pic['image'];
+            $list['photo'] = $pic->image;
         }
 
         return ['status' => 200, 'desc' => 'Wishlist fetched successfully', 'data'=> $list ];
