@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\product;
+use App\Models\productImages;
 use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class WishlistController extends Controller
         $list = [];
         foreach ($wishlist as $wish){
             $list[] = product::find($wish['product_id']);
+            $list['picture'] = productImages::where('product_id', $wish['product_id'])->first();
         }
 
         return ['status' => 200, 'desc' => 'Wishlist fetched successfully', 'data'=> $list ];
