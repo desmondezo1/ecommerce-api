@@ -27,12 +27,13 @@ class ProductController extends Controller
             $images = $images->toArray();
             $product['photo'] = "https://via.placeholder.com/150";
             $brand = partner::find($product->brand_id);
-//            $product['brand'] = $brand['name'];
+            return $brand;
+            $product['brand'] = $brand['name'];
             if(!empty($images)){
               $product['photo'] = $images[0]['image'];
             }
         }
-        return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $brand ];
+        return ['status' => 200, 'desc' => 'Products fetched successfully', 'data'=> $products ];
     }
 
     public  function getSingleProduct($product_id){
