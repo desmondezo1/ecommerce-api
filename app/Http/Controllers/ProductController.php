@@ -27,7 +27,7 @@ class ProductController extends Controller
             $images = $images->toArray();
             $product['photo'] = "https://via.placeholder.com/150";
             $brand = partner::find($product->brand_id);
-            $product['brand'] = $brand->name;
+            $product['brand'] = $brand['name'];
             if(!empty($images)){
               $product['photo'] = $images[0]['image'];
             }
