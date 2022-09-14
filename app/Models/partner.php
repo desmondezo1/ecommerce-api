@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class partner extends Model
 {
+    protected $guarded = [];
     protected $fillable = [
         'photo',
         'name',
