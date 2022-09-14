@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = product::with('category')->get(["id","title","description","discount","price","offer_price","photo","status","updated_at"]);
+        $products = product::with('category')->get(["id","title","description","discount","price","offer_price","photo","brand_id","status","updated_at"]);
         foreach ($products as &$product ){
             if ($product->status == "unpublished"){ continue;}
 
@@ -26,7 +26,7 @@ class ProductController extends Controller
             $categories = product::find($product->id)->images;
             $images = $images->toArray();
             $product['photo'] = "https://via.placeholder.com/150";
-            $brand = partner::find(8);
+            $brand = partner::find($product->brand_id);
             $product['brand'] = $brand['name'];
             if(!empty($images)){
               $product['photo'] = $images[0]['image'];
