@@ -60,7 +60,6 @@ class CartController extends Controller
     public function addItemsToCart(Request $request){
         $cart = [];
         $carrt = $request->all();
-//        return $carrt;
         foreach ($carrt as $req){
 
             $product = product::find($req['product_id']);

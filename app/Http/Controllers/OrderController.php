@@ -62,7 +62,7 @@ class OrderController extends Controller
         }
 
        //grab all orders for user
-        $order = order::where('user_id',$user_id)->get();
+        $order = order::where('user_id',$user_id)->orderByDesc('created_at')->get();
 
         if (is_null($order)){
             return ['status' => 500, 'desc' => 'Order not found' ];
@@ -99,6 +99,7 @@ class OrderController extends Controller
         $total_amount = 0;
         $sub_total = 0;
         $delivery_charge = 0;
+        $tax = 0;
         $products = [];
 
 //        $this->validate($request,[
@@ -131,7 +132,16 @@ class OrderController extends Controller
             $delivery_charge = $request->delivery_charge;
         }
 
+        if($request->tax){
+            $tax = $request->tax;
+        }
+
         $total_amount = $sub_total + $delivery_charge;
+
+        if($tax){
+            $total_amount += $tax;
+        }
+
         try {
             $order =  order::create([
                 "user_id" => $user->id,
