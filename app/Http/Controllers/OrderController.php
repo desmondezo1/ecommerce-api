@@ -124,7 +124,7 @@ class OrderController extends Controller
 
         foreach ($cart as $product){
             $sub_total += ($product['price'] * $product['quantity']);
-            $products[] = ["id" => $product['product_id'], "qty" => $product['quantity']];
+            $products[] = ["id" => $product['product_id'], "qty" => $product['quantity'], "price" => $product['price']];
         }
 
 
