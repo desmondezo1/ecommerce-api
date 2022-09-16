@@ -87,6 +87,8 @@ class PaymentsController extends Controller
         $paymentT->stripe_payment_currency = $session['currency'];
         $paymentT->stripe_payment_id = $session['id'];
         $paymentT->save();
+
+        \Stripe\Checkout\Session::expire($session['id'],[]);
         return  ['status' => 200, 'url'=> $session['url']];
 
     }
