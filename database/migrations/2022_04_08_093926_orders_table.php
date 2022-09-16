@@ -17,7 +17,7 @@ class OrdersTable extends Migration
             $table->id();
             $table->string('order_number')->unique();
             $table->string('user_id');
-            $table->string('product_id')->nullable();
+            $table->text('product_id')->nullable();
             $table->float('sub_total');
             $table->string('coupon')->nullable();
             $table->float('total_amount');
