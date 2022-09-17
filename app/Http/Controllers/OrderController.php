@@ -236,8 +236,9 @@ class OrderController extends Controller
         if ($request->payment_status){
             $order->payment_status = $request->payment_status;
         }
+        $order->save();
 
-        return ['status' => 200, 'desc' => 'Order updated successfully', 'data'=> $request->order_status];
+        return ['status' => 200, 'desc' => 'Order updated successfully', 'data'=> $order];
     }
 
     /**
