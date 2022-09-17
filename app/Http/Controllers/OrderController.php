@@ -230,8 +230,8 @@ class OrderController extends Controller
             return response()->json(["msg" => "order invalid"], 402);
         }
 
-        if($request->status){
-            $order->status = $request->status;
+        if($request->order_status){
+            $order->status = $request->order_status;
         }
         if ($request->payment_status){
             $order->payment_status = $request->payment_status;
