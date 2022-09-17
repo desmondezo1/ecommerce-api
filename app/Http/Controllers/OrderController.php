@@ -21,7 +21,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = order::all();
+        $orders = order::orderBy('created_at','desc')->get();
         return ['status' => 200, 'desc' => 'Fetched Orders', 'data'=> $orders ];
     }
 
