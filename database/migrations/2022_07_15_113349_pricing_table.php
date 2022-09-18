@@ -15,8 +15,8 @@ class PricingTable extends Migration
     {
         Schema::create('pricing_table', function (Blueprint $table) {
             $table->id();
-            $table->integer('min_weight')->nullable();
-            $table->integer('max_weight')->nullable();
+            $table->float('min_weight')->nullable();
+            $table->float('max_weight')->nullable();
             $table->float('price')->nullable();
             $table->timestamps();
         });
