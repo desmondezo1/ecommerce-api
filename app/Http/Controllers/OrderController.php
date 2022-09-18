@@ -221,7 +221,7 @@ class OrderController extends Controller
 //            $sumCost += $p;
 //        }
 
-        return response()->json(["data" => $cost ], 200);
+        return response()->json(["data" => pricingTable::all()], 200);
 
     }
     /**
