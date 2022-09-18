@@ -74,9 +74,29 @@ class PaymentsController extends Controller
         $session = \Stripe\Checkout\Session::create([
             'line_items' =>
                 [$stripeProducts],
-//            'automatic_tax' => [
-//                'enabled' => true,
-//            ],
+            'shipping_options' => [
+                [
+                    'shipping_rate_data' => [
+                        'type' => 'fixed_amount',
+                        'fixed_amount' => [
+                            'amount' => 1500,
+                            'currency' => 'EUR',
+                        ],
+                        'display_name' => 'Door delivery',
+                        // Delivers in exactly 1 business day
+                        'delivery_estimate' => [
+                            'minimum' => [
+                                'unit' => 'business_day',
+                                'value' => 1,
+                            ],
+                            'maximum' => [
+                                'unit' => 'business_day',
+                                'value' => 7,
+                            ],
+                        ]
+                    ]
+                ],
+            ],
             'mode' => 'payment',
 //            'success_url' => env("APP_URL").'/api/payment/success/'.$trans['trans_id']."/".$order["id"],
             'success_url' => env("FRONTEND_APP_URL").'/api/payment/success?transid='.$trans['trans_id']."&orderid=".$order["id"],
