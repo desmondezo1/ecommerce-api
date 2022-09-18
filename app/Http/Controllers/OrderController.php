@@ -9,6 +9,7 @@ use App\Models\pricingTable;
 use App\Models\product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 
