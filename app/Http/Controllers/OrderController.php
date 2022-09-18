@@ -209,8 +209,8 @@ class OrderController extends Controller
 
         $cost = DB::table('pricing_table')
             ->select('price','max_weight','min_weight')
-            ->where('max_weight', '<=',  $weight)
-            ->where('min_weight', '>',  $weight)
+            ->where('max_weight', '<=',  (float)$weight)
+            ->where('min_weight', '>',  (float)$weight)
             ->get()
             ->first();
 //            $finalCost = $cost->value('price');
@@ -221,7 +221,7 @@ class OrderController extends Controller
 //            $sumCost += $p;
 //        }
 
-        return response()->json(["data" => $weight], 200);
+        return response()->json(["data" => pricingTable::all()], 200);
 
     }
     /**
