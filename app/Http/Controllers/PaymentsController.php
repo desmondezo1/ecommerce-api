@@ -74,9 +74,9 @@ class PaymentsController extends Controller
         $session = \Stripe\Checkout\Session::create([
             'line_items' =>
                 [$stripeProducts],
-            'automatic_tax' => [
-                'enabled' => true,
-            ],
+//            'automatic_tax' => [
+//                'enabled' => true,
+//            ],
             'mode' => 'payment',
 //            'success_url' => env("APP_URL").'/api/payment/success/'.$trans['trans_id']."/".$order["id"],
             'success_url' => env("FRONTEND_APP_URL").'/api/payment/success?transid='.$trans['trans_id']."&orderid=".$order["id"],
