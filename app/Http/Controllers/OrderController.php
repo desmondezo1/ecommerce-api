@@ -203,9 +203,15 @@ class OrderController extends Controller
 //        if(empty($arrOfWeight)){
 //            return response()->json(["msg" => "Weight not found"], 500);
 //        }
+            $pricing = pricingTable::all();
+            foreach ($pricing as $prc){
+                if ($prc->max_weight <= $weight && $prc->min_weight >= $weight){
+                    return response()->json(["data" => $prc->price], 200);
+                }
+            }
 
 //        foreach ($arrOfWeight as $weight) {
-            $cost = pricingTable::where('max_weight', '<=', (float)$weight)->get();
+//            $cost = pricingTable::where('max_weight', '<=', (float)$weight)->get();
 //
 //        $cost = DB::table('pricing_table')
 //            ->select('price','max_weight','min_weight')
@@ -221,7 +227,7 @@ class OrderController extends Controller
 //            $sumCost += $p;
 //        }
 
-        return response()->json(["data" => $cost], 200);
+        return response()->json(["data" => "no price found"], 200);
 
     }
     /**
