@@ -24,7 +24,7 @@ class pricingTableSeeder extends Seeder
             ['max_weight' => 70,'min_weight' => 50.1, 'price' => 26.92],
             ['max_weight' => 75,'min_weight' => 70.1, 'price' => 30.00],
             ['max_weight' => 100,'min_weight' => 75.1, 'price' => 31.73],
-            ['max_weight' => 1000000,'min_weight' => 100.1, 'price' => 28.00]
+            ['max_weight' => 1000,'min_weight' => 100.1, 'price' => 28.00]
         ];
 
         foreach ($pricing  as $price){
