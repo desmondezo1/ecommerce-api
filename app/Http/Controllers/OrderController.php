@@ -205,8 +205,6 @@ class OrderController extends Controller
 //        }
             $pricing = pricingTable::all();
             foreach ($pricing as $prc){
-                print_r($prc->max_weight );
-                print_r($prc->min_weight );
                 if ($prc->max_weight >= $weight && $prc->min_weight <= $weight){
                     return response()->json(["data" => $prc->price], 200);
                 }
