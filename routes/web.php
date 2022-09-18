@@ -26,6 +26,8 @@
         $router->get('/brands',['uses' => 'PartnerController@index', 'as' => 'getAllBrands']);
         $router->get('/categories',['uses' => 'CategoryController@index', 'as' => 'getAllCategories']);
         $router->get('/logout',['uses' => 'AuthController@logout', 'as' => 'logout']);
+        $router->get('/calculateShipping/{weight}',['uses' => 'OrderController@calculateShippingFromWeight', 'as' => 'calculateShipping']);
+
 
         $router->group(['prefix' => 'wishlist'],function () use ($router) {
             $router->get('/{user_id}', ['uses' => 'WishlistController@index', 'as' => 'getUserWishlist']);
@@ -56,7 +58,6 @@
                 $router->post('/{user_id}/billing-address',['uses' => 'userController@createBillingAddress', 'as' => 'createUserBilling']);
                 $router->patch('/{user_id}/billing-address',['uses' => 'userController@updateBillingAddress', 'as' => 'updateUserBilling']);
                 $router->get('/{user_id}/orders',['uses' => 'OrderController@getUserOrders', 'as' => 'getUserOrders']);
-                $router->get('/{user_id}/orders/calculateShipping',['uses' => 'OrderController@calculateShippingFromWeight', 'as' => 'calculateShipping']);
                 $router->get('/{user_id}/wishlist',['uses' => 'WishlistController@index', 'as' => 'getUserWishlist']);
                 $router->post('/{user_id}/wishlist',['uses' => 'WishlistController@create', 'as' => 'addItemWishlist']);
                 $router->delete('/{user_id}/wishlist',['uses' => 'WishlistController@destroy', 'as' => 'removeItemFromWishlist']);

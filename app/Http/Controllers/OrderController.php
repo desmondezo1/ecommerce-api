@@ -184,36 +184,36 @@ class OrderController extends Controller
 
     }
 
-    public function calculateShippingFromWeight($user_id){
+    public function calculateShippingFromWeight($weight){
 
-        $userCart = cart::where('user_id', $user_id)->get();
-        $arrOfWeight = [];
-        $costArr = [];
+//        $userCart = cart::where('user_id', $user_id)->get();
+//        $arrOfWeight = [];
+//        $costArr = [];
 
-        if(!$userCart){
-            return response()->json(["msg" => "Cart is empty invalid"], 500);
-        }
+//        if(!$userCart){
+//            return response()->json(["msg" => "Cart is empty invalid"], 500);
+//        }
+//
+//        foreach ($userCart as $cartItem){
+//            $item = product::find($cartItem->product_id);
+//            $arrOfWeight[] = $item->volume;
+//        }
 
-        foreach ($userCart as $cartItem){
-            $item = product::find($cartItem->product_id);
-            $arrOfWeight[] = $item->volume;
-        }
+//        if(empty($arrOfWeight)){
+//            return response()->json(["msg" => "Weight not found"], 500);
+//        }
 
-        if(empty($arrOfWeight)){
-            return response()->json(["msg" => "Weight not found"], 500);
-        }
-
-        foreach ($arrOfWeight as $weight) {
+//        foreach ($arrOfWeight as $weight) {
             $cost = pricingTable::where('max_weight', '<=', $weight)->where('min_weight', '>=', $weight);
-            $costArr[] = (int)$cost->value('price');
-        }
+            $finalCost = (int)$cost->value('price');
+//        }
 
-        $sumCost = 0;
-        foreach ($costArr as $p){
-            $sumCost += $p;
-        }
+//        $sumCost = 0;
+//        foreach ($costArr as $p){
+//            $sumCost += $p;
+//        }
 
-        return response()->json(["data" => $sumCost], 200);
+        return response()->json(["data" => $finalCost], 200);
 
     }
     /**
