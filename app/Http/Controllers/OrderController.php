@@ -204,8 +204,8 @@ class OrderController extends Controller
 //        }
 
 //        foreach ($arrOfWeight as $weight) {
-            $cost = pricingTable::where('max_weight', '<=', $weight)->where('min_weight', '>=', $weight);
-            $finalCost = (int)$cost->value('price');
+            $cost = pricingTable::where('max_weight', '<=', (int)$weight)->where('min_weight', '>=', (int)$weight);
+            $finalCost = $cost->value('price');
 //        }
 
 //        $sumCost = 0;
