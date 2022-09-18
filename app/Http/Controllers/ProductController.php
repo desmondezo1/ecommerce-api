@@ -27,6 +27,10 @@ class ProductController extends Controller
             $images = $images->toArray();
             $product['photo'] = "https://via.placeholder.com/150";
             $brand = partner::find($product->brand_id);
+            $pieces = Pieces::where('product_id', $product->id)->get();
+            if ($pieces){
+                $product['weight'] = $pieces[0]['weight'];
+            }
             if($brand){
                 $product['brand'] = $brand['name'];
             }

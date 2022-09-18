@@ -79,7 +79,7 @@ class PaymentsController extends Controller
                     'shipping_rate_data' => [
                         'type' => 'fixed_amount',
                         'fixed_amount' => [
-                            'amount' => 1500,
+                            'amount' => $order['delivery_charge'],
                             'currency' => 'EUR',
                         ],
                         'display_name' => 'Door delivery',
