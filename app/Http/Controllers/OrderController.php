@@ -205,7 +205,7 @@ class OrderController extends Controller
 
 //        foreach ($arrOfWeight as $weight) {
             $cost = pricingTable::where('max_weight', '<=', (int)$weight)->where('min_weight', '>=', (int)$weight)->get();
-            $finalCost = $cost->value('price');
+//            $finalCost = $cost->value('price');
 //        }
 
 //        $sumCost = 0;
