@@ -55,6 +55,7 @@ class ProductController extends Controller
 
             $brand = partner::find($product->brand_id);
             $product['brand'] = $brand->name;
+            $product['weight'] = $pieces[0]['weight'];
             $product['variation'] = $pieces;
 
         return ['status' => 200, 'desc' => 'Product Fetched', 'data' => $product ];
