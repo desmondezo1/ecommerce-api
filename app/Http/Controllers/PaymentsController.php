@@ -37,7 +37,7 @@ class PaymentsController extends Controller
                         'unit_amount' => $prd['price'] * 100,
                         ],
                     'quantity' => $prd['qty'],
-                    'tax_rates' => ['txr_1LinWTATJf7NFjaPB7z8gUFh'],
+                    'tax_rates' => [env("STRIPE_TAX_ID")],
                     ];
             }
             $productArray[] = $rr;
@@ -74,6 +74,9 @@ class PaymentsController extends Controller
         $session = \Stripe\Checkout\Session::create([
             'line_items' =>
                 [$stripeProducts],
+            'automatic_tax' => [
+                'enabled' => true,
+            ],
             'mode' => 'payment',
 //            'success_url' => env("APP_URL").'/api/payment/success/'.$trans['trans_id']."/".$order["id"],
             'success_url' => env("FRONTEND_APP_URL").'/api/payment/success?transid='.$trans['trans_id']."&orderid=".$order["id"],
