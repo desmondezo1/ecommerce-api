@@ -204,7 +204,7 @@ class OrderController extends Controller
 //        }
 
 //        foreach ($arrOfWeight as $weight) {
-            $cost = pricingTable::where('max_weight', '<=', (int)$weight)->where('min_weight', '>=', (int)$weight);
+            $cost = pricingTable::where('max_weight', '<=', (int)$weight)->where('min_weight', '>=', (int)$weight)->get();
             $finalCost = $cost->value('price');
 //        }
 
@@ -213,7 +213,7 @@ class OrderController extends Controller
 //            $sumCost += $p;
 //        }
 
-        return response()->json(["data" => $finalCost], 200);
+        return response()->json(["data" => $cost ], 200);
 
     }
     /**
