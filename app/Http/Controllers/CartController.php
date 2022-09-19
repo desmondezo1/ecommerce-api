@@ -67,13 +67,14 @@ class CartController extends Controller
                 return ['status' => 401, 'desc' => 'Product doesnt exist'];
             }
 
-//            $prodCart = cart::where('user_id', $req['user_id'])->where('product_id', $req['product_id'])->first();
+            $prodCart = cart::where('user_id', $req['user_id'])->where('product_id', $req['product_id'])->first();
 //
-//            if (!is_null($prodCart)){
-//                $prodCart->quantity +=  1;
-//                $prodCart->save();
+            if (!is_null($prodCart)){
+                $prodCart->quantity +=  1;
+                $prodCart->save();
+                continue;
 //                return response('Item Quantity Updated',200);
-//            }
+            }
 
             try {
                 $cart[] = cart::create([
