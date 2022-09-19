@@ -38,7 +38,7 @@ class CartController extends Controller
             }
             $prodCart = cart::where('user_id', $request->user_id)->where('product_id', $request->product_id)->first();
 
-            if (!is_null($prodCart)){
+            if ($prodCart){
                 $prodCart->quantity +=  1;
                 $prodCart->save();
                 return response('Item Quantity Updated',200);
