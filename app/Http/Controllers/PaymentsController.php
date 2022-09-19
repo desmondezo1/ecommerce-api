@@ -82,7 +82,7 @@ class PaymentsController extends Controller
                             'amount' => $order['delivery_charge'] * 100,
                             'currency' => 'EUR',
                         ],
-                        'display_name' => 'Door delivery',
+                        'display_name' => $order['shipping_type'] === 2 ? 'consegna a domicilio': "stazione di prelievo",
                         // Delivers in exactly 1 business day
                         'delivery_estimate' => [
                             'minimum' => [
