@@ -53,10 +53,15 @@ class ProductController extends Controller
 
         $product['images'] = product::find($product->id)->images;
 
+        foreach($pieces as &$piece){
+            $piece['photo'] = $product['images'][0]['image'];
+        }
+
             $brand = partner::find($product->brand_id);
             $product['brand'] = $brand->name;
             $product['weight'] = $pieces[0]['weight'];
             $product['variation'] = $pieces;
+
 
         return ['status' => 200, 'desc' => 'Product Fetched', 'data' => $product ];
 
