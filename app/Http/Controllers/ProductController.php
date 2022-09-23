@@ -55,6 +55,7 @@ class ProductController extends Controller
 
         foreach($pieces as &$piece){
             $piece['photo'] = $product['images'][0]['image'];
+            $piece['images'] =  $product['images'];
         }
 
             $brand = partner::find($product->brand_id);
