@@ -56,6 +56,7 @@
                 $router->get('/{user_id}',['uses' => 'userController@getUser', 'as' => 'getUser']);
                 $router->patch('/{id}',['uses' => 'userController@update', 'as' => 'updateUser']);
                 $router->post('/{user_id}/billing-address',['uses' => 'userController@createBillingAddress', 'as' => 'createUserBilling']);
+                $router->get('/{user_id}/billing-address',['uses' => 'userController@getBillingAddress', 'as' => 'getUserBilling']);
                 $router->patch('/{user_id}/billing-address',['uses' => 'userController@updateBillingAddress', 'as' => 'updateUserBilling']);
                 $router->get('/{user_id}/orders',['uses' => 'OrderController@getUserOrders', 'as' => 'getUserOrders']);
                 $router->get('/{user_id}/wishlist',['uses' => 'WishlistController@index', 'as' => 'getUserWishlist']);
