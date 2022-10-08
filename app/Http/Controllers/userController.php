@@ -338,6 +338,7 @@ class userController extends Controller
     }
 
     public function getBillingAddress(Request $request, $user_id){
+        return $user_id;
         $billInfo = billing_address::where('user_id',$user_id)->first();
         if (is_null($billInfo)){
             return ['status' => 500, 'desc' => 'Can\'t find Billing info'];
