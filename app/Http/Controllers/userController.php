@@ -270,6 +270,8 @@ class userController extends Controller
             $billInfo->fax = $request->fax;
             $billInfo->cap = $request->cap;
             $billInfo->save();
+
+            return ['status' => 200, 'desc' => 'Updated Billing info Successfully ', "data" => $billInfo];
         } catch (\Exception $e){
             return ['status' => 500, 'desc' => 'Can\'t update Billing info : '. $e->getMessage()];
 
