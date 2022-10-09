@@ -13,7 +13,7 @@ class AddAptSuite extends Migration
      */
     public function up()
     {
-        Schema::table('billing_address', function (Blueprint $table) {
+        Schema::table('billing_addresses', function (Blueprint $table) {
             $table->string('aptsuite')->nullable();
         });
     }
@@ -25,7 +25,7 @@ class AddAptSuite extends Migration
      */
     public function down()
     {
-        Schema::table('billing_address', function (Blueprint $table) {
+        Schema::table('billing_addresses', function (Blueprint $table) {
             $table->dropColumn('aptsuite');
         });
     }
