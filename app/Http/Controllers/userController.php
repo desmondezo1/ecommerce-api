@@ -264,6 +264,7 @@ class userController extends Controller
             $billInfo->vat_number = $request->vat_number;
             $billInfo->unique_code = $request->unique_code;
             $billInfo->pec = $request->pec;
+            $billInfo->aptsuite = $request->aptsuite;
             $billInfo->reference_person = $request->reference_person;
             $billInfo->house_no = $request->house_no;
             $billInfo->recipient_code = $request->recipient_code;
@@ -324,6 +325,7 @@ class userController extends Controller
                     "vat_number" => $request->vat_number,
                     "unique_code" => $request->unique_code,
                     "pec" => $request->pec,
+                    "aptsuite" => $request->aptsuite,
                     "reference_person" => $request->reference_person,
                     "house_no" => $request->house_no,
                     "recipient_code" => $request->recipient_code,
