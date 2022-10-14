@@ -208,8 +208,10 @@ class OrderController extends Controller
                 if ($prc->max_weight >= (float)$weight && $prc->min_weight <= (float)$weight){
                     return response()->json(["data" => $prc->price], 200);
 //                    return response()->json(["data" => [$prc->price, $prc->max_weight, $prc->min_weight]], 200);
-                } elseif ((float)$weight > 1000){
-                    return response()->json(["data" => 28.00], 200);
+                } elseif ((float)$weight > 200){
+                    $newW = ((float)$weight - 200) * 0.2828;
+                    $p = $newW + 59.73;
+                    return response()->json(["data" => $p], 200);
                 }
             }
 
